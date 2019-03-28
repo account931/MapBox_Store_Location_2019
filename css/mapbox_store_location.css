@@ -1,0 +1,25 @@
+#map {  margin:0 auto; }
+
+
+.footer {
+  /* position: absolute; */
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  background-color: #efefef; /* #2ba6cb; */
+  text-align: center;  
+}
+
+
+/*  Upload link at top right */
+.upload{
+	position:absolute;
+	right: 1%;
+	top:0.5em;
+	cursor:pointer;
+	font-size:1em;
+	text-color:white;
+}
+
+.upload a{ color:white;}

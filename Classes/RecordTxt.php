@@ -1,5 +1,6 @@
 <?php
 
+namespace Cubet;
 class RecordTxt {
 
 

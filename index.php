@@ -1,3 +1,8 @@
+<?php
+ini_set('display_errors',1);
+error_reporting(E_ALL | E_STRICT);
+require 'vendor/autoload.php'; //Composer autoload
+?>
 <!doctype html>
 <!--------------------------------Bootstrap  Main variant ------------------------------------------>
   <html lang="en-US">
@@ -12,18 +17,11 @@
       <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
 
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	  
 	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> <!-- fa-fa images library-->
-	  
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	 
-
       <link rel="stylesheet" type="text/css" media="all" href="css/mapbox_store_location.css">
 	  
-      <script src="js/mapbox_store_location.js"></script><!--  Core Mapbox JS-->
-	  <script src="js/changeStyleTheme.js"></script> <!-- change wallpapers,changeStyleTheme JS-->
-	  
+	 <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js'></script> <!-- Mapbox L JS -->
+     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet' /> <!-- Mapbox L JS -->
 	 
 	  <meta name="viewport" content="width=device-width" />
 	  
@@ -40,71 +38,42 @@
 
 
 
-       <div id="headX" class="jumbotron text-center gradient alert-success my-background head-style" style =' background-color:lavender ;'> <!--#2ba6cb;-->
-         <h1 id="h1Text"> <span id="textChange"> MapBox Store Loaction 2019</span> <i class='fa fa-music' style='font-size:46px;'></i>  </h1> 
+       <div id="headX" class="jumbotron text-center gradient alert-success my-background head-style" style ='background-color:#2ba6cb;'> <!--#2ba6cb;-->
+         <h1 id="h1Text"> <span id="textChange"> MapBox Store Loaction 2019</span></h1> 
 		 
-		 <!------------------ MP3 PLAYER DEACTIVATED, MOVED DOWN ------------------><!-- class="control-play-pause-EQ" is common for player and all songList to trigger changing Play/Pause Icon and hide/show EQ-->
-		 <!--
-		 <p id="playerSongTitleR" class="" style="height:1.4em;"></p>
-		  <audio id="audioR" class="styleme control-play-pause-EQ" width="320" height="240" controls>   
-              <source src="" type="audio/mp3">
-		  </audio>
-		  -->
-		  <!------------------ MP3 PLAYER ------------------>
-		  
-		<!--<img src="images/radio.png" alt="eq" class="eqHeader"/>-->
 	   </div>
-
-
-
        
          <div class="wrapper grey">
     	     <div class="container">
 		         <div class="row row1">
 			 
-			     
-					 
-			  
-			        	
-			        
 				 
 				 
-				 
-				      <!-------------- Mp3 files list------------->
+				      <!-------------- Mapbox main window ------------->
 				    
 				          <div class="col-sm-12 col-xs-12 " id="mp3Result">
-						      <?php
-							      include '/Classes/autoload.php'; //uses autoload instead of manual includin each class-> Error if it is included in 2 files=only1 is accepted
-							      include 'Classes/MpServerList.php';
-								  $mpObject = new MpServerList();
-								  $mpObject->getMp3List("mp3");
-							  ?>      
+						      <div id='map' style='width: 80%; height: 400px;'></div>  
 				          </div>
+						  
+<script>
+//pk.eyJ1IjoiYWNjb3VudDkzMSIsImEiOiJjaXgwOHFydHgwMDduMnlwZnF1OW52YmExIn0.tVYeU6k75W1Br3dnxxQbvQ
+mapboxgl.accessToken = 'pk.eyJ1IjoiYWNjb3VudDkzMSIsImEiOiJjaXgwOTVuOTEwMGFxMnVsczRwOWx0czhnIn0.YjZ5bpnh6jqTEk7cCJfrzw';
+var map = new mapboxgl.Map({
+container: 'map', // container id
+style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
+center: [28.665445, 50.264004], // starting position [lng, lat]
+zoom: 13 // starting zoom
+});
+
+</script>
+						  
 				          <br><br><br>
-				      <!-------------- END  Mp3 files list------------->
+				      <!-------------- END  Mapbox main window ------------->
 				 
-				 
-				  
-				  
-				
-	 
-	 
-	 
-	 
-				   
 				   
 			      </div>  <!-- END class="row row1"> here, to make sure QR img appears on the same line in desktop-->
 				  
-				  
-				  
-				  
-				  
-				
-				
-				
-				
-              
-	 
+
 	 
     		</div><!-- /.container -->	  		
          </div><!-- /.wrapper -->
@@ -114,9 +83,7 @@
 
 				
     	          
-    	
-		
-		
+   	
 		
 			      <!-----------------  Button to change Style theme------------------------->
 	              <input type="button" class="btn" value=">>" id="changeStyle" style="position:absolute;top:0px;left:0px;" title="click to change theme"/>
@@ -125,34 +92,15 @@
 				  
 				  
 				  
-				  <!------------------- Checkbox REPLAY LOOP,repeat one song, absolute position, top left ------------------->
-				  <div style="position:absolute; top:60px; left:1px;" title="Loop">
-				   &nbsp;&nbsp;<br>
-				  <label class="switch">
-                      <input type="checkbox" id="myCheck">
-                          <span class="slider round"></span>
-                  </label> 
-				  <!--<i class="fa fa-rotate-right" style="font-size:30px;margin-left:20px;"></i>-->
-				  </div>
-                  <!------------------- Checkbox REPLAY LOOP, absolute position, top left ------------------------------------->
+				 
 				  
 				  
-				  
-				 <!---------------------------------- MP3 PLAYER FIXED POSITION--------------------------->
-				 <div class="col-sm-12 col-xs-12" style="position:fixed; bottom:0px;">
-				   <center>
-		             <p id="playerSongTitle" class=""></p>
-		                 <audio id="audio" class="styleme control-play-pause-EQ" width="320" height="240" controls>   <!-- class="control-play-pause-EQ" is common for player and all songList to trigger changing Play/Pause Icon and hide/show EQ-->
-                             <source src="" type="audio/mp3">
-		                 </audio>
-					</center>
-				 </div>
-		         <!--------------------------------- MP3 PLAYER FIXED POSITION ----------------------------->
+				
 				 
 				 
 				 
 				 <!---------------------------------- Link to upload mp3--------------------------->
-				 <p class="upload"><a class="" href="admin/Classes/authentication.php">Upload mp3</a></p> <!-- Link to upload-->
+				 <p class="upload"><a class="" href="admin/Classes/authentication.php">Upload POI</a></p> <!-- Link to upload-->
 				  
 				  
 				  
@@ -170,7 +118,11 @@
 		
 		
 		
-    
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <script src="js/mapbox_store_location.js"></script><!--  Core Mapbox JS -->
+	  <script src="js/changeStyleTheme.js"></script> <!-- change wallpapers,changeStyleTheme JS-->
+	  
     </body>
 </html>
 
@@ -181,7 +133,11 @@
 <?php
 
 // Record (with CLASS) all the  input  to  txt;  //;
-      include("Classes/RecordTxt.php"); //using autoload instead of it
-      //RecordTxt::RecordAnyInput(array(/*$user*/), 'recordText/mapbox.txt');// Record  to  text;
+      //include("Classes/RecordTxt.php"); //using autoload instead of it
+	   //Namespace variant_1----------
+	   //Bellow is working Namespace usage
+	   //use Cubet\RecordTxt as Dima;
+       //Dima::RecordAnyInput(array(/*$user*/), 'recordText/mapbox.txt'); // Record  to  text;
+	   
 //End  Record;
 ?>

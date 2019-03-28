@@ -1,0 +1,26 @@
+{
+    "name": "dima/map-box_store_location_2019",
+    "authors": [
+        {
+            "name": "Dima",
+            "email": "account931@ukr.net"
+        }
+    ],
+    "require": {},
+	
+	"_comment": "comment text goes here-> PSR-4 autoload-> it says, namespace 'Cubet' should be found in folder 'vendor'; Classmap is for classes that don't fin  PSR-4, specifies the folder where to look those classes  ",
+	
+	
+	
+    "autoload": {
+	
+        "psr-4": {
+            "Cubet\\": "Classes" 
+			
+        },
+	
+		"classmap": [
+		    ""
+        ]
+    }
+}
