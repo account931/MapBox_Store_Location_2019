@@ -1,5 +1,12 @@
+Works on Mapbox GL JS.
+Example of GMaps store_locator application but working on Mapbox GL JS
+
 https://docs.mapbox.com/mapbox-gl-js/overview/
+https://docs.mapbox.com/help/tutorials/custom-markers-gl-js/
 ========================================================
+
+
+
 
 ========================================================= 
 COMPOSER AUTOLOADER(and its vendor folder), for more details see {account931/miscellaneous_2018/composer_autoload/ReadMe.txt} 

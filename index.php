@@ -52,7 +52,8 @@ require 'vendor/autoload.php'; //Composer autoload
 				      <!-------------- Mapbox main window ------------->
 				    
 				          <div class="col-sm-12 col-xs-12 " id="mp3Result">
-						      <div id='map' style='width: 80%; height: 400px;'></div>  
+						      <div id='map' style='width: 80%; height: 400px;'></div> <!-- Maps go here -->
+							  <pre id='info'></pre> <!-- Mouse coords go here -->
 				          </div>
 						  
 <script>
@@ -60,11 +61,92 @@ require 'vendor/autoload.php'; //Composer autoload
 mapboxgl.accessToken = 'pk.eyJ1IjoiYWNjb3VudDkzMSIsImEiOiJjaXgwOTVuOTEwMGFxMnVsczRwOWx0czhnIn0.YjZ5bpnh6jqTEk7cCJfrzw';
 var map = new mapboxgl.Map({
 container: 'map', // container id
-style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
 center: [28.665445, 50.264004], // starting position [lng, lat]
-zoom: 13 // starting zoom
+zoom: 13, // starting zoom
+style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
+//style: 'mapbox://styles/mapbox/satellite-v9'
 });
 
+
+// Add zoom and rotation controls to the map.
+map.addControl(new mapboxgl.NavigationControl());
+
+
+
+
+//JSON DATA
+var geojson = {
+  type: 'FeatureCollection',
+  features: [{
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [28.674557, 50.265412]
+    },
+    properties: {
+      title: 'Mapbox pop-up 1',
+      description: 'Zhytomyr test marker',
+	   /* icon: {
+        iconUrl: 'https://www.mapbox.com/mapbox.js/assets/images/astronaut1.png',
+        iconSize: [50, 50], // size of the icon
+        iconAnchor: [25, 25], // point of the icon which will correspond to marker's location
+        popupAnchor: [0, -25], // point from which the popup should open relative to the iconAnchor
+        className: 'dot'
+      }
+	  */
+	  
+	  
+    }
+  },
+  //end of marker 1
+  {
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [28.665445, 50.264004]
+    },
+    properties: {
+      title: 'Mapbox pop-up 2',
+      description: 'Zhytomyr, test marker'
+    }
+  }]
+};
+
+
+
+
+
+
+
+
+// add markers to map
+geojson.features.forEach(function(marker) {
+
+  // create a HTML element for each feature
+  var el = document.createElement('div');
+  el.className = 'marker';
+
+  // make a marker for each feature and add to the map
+  new mapboxgl.Marker(el)
+    .setLngLat(marker.geometry.coordinates)
+	.setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+    .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
+    .addTo(map);
+});
+
+
+
+
+
+//Get coordinates onMouse
+map.on('click', function (e) {  //mousemove
+document.getElementById('info').innerHTML =
+// e.point is the x, y coordinates of the mousemove event relative
+// to the top-left corner of the map
+JSON.stringify(e.point) + '<br />' +
+// e.lngLat is the longitude, latitude geographical position of the event
+JSON.stringify(e.lngLat);
+});
 </script>
 						  
 				          <br><br><br>
