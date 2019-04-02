@@ -23,6 +23,13 @@ require 'vendor/autoload.php'; //Composer autoload
 	 <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js'></script> <!-- Mapbox L JS -->
      <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet' /> <!-- Mapbox L JS -->
 	 
+	 
+	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	  <script src="Credentials/api_access_token.js"></script><!--  MapBox Access token -->
+      <script src="js/mapbox_store_location.js"></script><!--  Core Mapbox JS -->
+	  <script src="js/changeStyleTheme.js"></script> <!-- change wallpapers,changeStyleTheme JS-->
+	 
 	  <meta name="viewport" content="width=device-width" />
 	  
 	  <!--Favicon-->
@@ -51,109 +58,26 @@ require 'vendor/autoload.php'; //Composer autoload
 				 
 				      <!-------------- Mapbox main window ------------->
 				    
-				          <div class="col-sm-12 col-xs-12 " id="mp3Result">
-						      <div id='map' style='width: 80%; height: 400px;'></div> <!-- Maps go here -->
+				          <div class="col-sm-12 col-xs-12 " id="">
+						      <div id='map' style='width: 80%; height: 400px;'></div> <!-- Maps Window goes here -->
 							  <pre id='info'></pre> <!-- Mouse coords go here -->
 				          </div>
-						  
-<script>
-
-mapboxgl.accessToken = 'pk.ey';
-var map = new mapboxgl.Map({
-container: 'map', // container id
-center: [28.665445, 50.264004], // starting position [lng, lat]
-zoom: 13, // starting zoom
-style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
-//style: 'mapbox://styles/mapbox/satellite-v9'
-});
-
-
-// Add zoom and rotation controls to the map.
-map.addControl(new mapboxgl.NavigationControl());
-
-
-
-
-//JSON DATA
-var geojson = {
-  type: 'FeatureCollection',
-  features: [{
-    type: 'Feature',
-    geometry: {
-      type: 'Point',
-      coordinates: [28.674557, 50.265412]
-    },
-    properties: {
-      title: 'Mapbox pop-up 1',
-      description: 'Zhytomyr test marker',
-	   /* icon: {
-        iconUrl: 'https://www.mapbox.com/mapbox.js/assets/images/astronaut1.png',
-        iconSize: [50, 50], // size of the icon
-        iconAnchor: [25, 25], // point of the icon which will correspond to marker's location
-        popupAnchor: [0, -25], // point from which the popup should open relative to the iconAnchor
-        className: 'dot'
-      }
-	  */
-	  
-	  
-    }
-  },
-  //end of marker 1
-  {
-    type: 'Feature',
-    geometry: {
-      type: 'Point',
-      coordinates: [28.665445, 50.264004]
-    },
-    properties: {
-      title: 'Mapbox pop-up 2',
-      description: 'Zhytomyr, test marker'
-    }
-  }]
-};
-
-
-
-
-
-
-
-
-// add markers to map
-geojson.features.forEach(function(marker) {
-
-  // create a HTML element for each feature
-  var el = document.createElement('div');
-  el.className = 'marker';
-
-  // make a marker for each feature and add to the map
-  new mapboxgl.Marker(el)
-    .setLngLat(marker.geometry.coordinates)
-	.setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
-    .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
-    .addTo(map);
-});
-
-
-
-
-
-//Get coordinates onMouse
-map.on('click', function (e) {  //mousemove
-document.getElementById('info').innerHTML =
-// e.point is the x, y coordinates of the mousemove event relative
-// to the top-left corner of the map
-JSON.stringify(e.point) + '<br />' +
-// e.lngLat is the longitude, latitude geographical position of the event
-JSON.stringify(e.lngLat);
-});
-</script>
-						  
 				          <br><br><br>
 				      <!-------------- END  Mapbox main window ------------->
 				 
+				 
+				 
+				      <!-------------- Matrix window(distance details between two points) ----------------->
+				          <div class="col-sm-12 col-xs-12 " id="matrixWindow">
+				          </div>
+				          <br>
+				      <!-------------- END  Matrix window(distance details between two points) ------------->
+				 
+				 
+				 
+				 
 				   
-			      </div>  <!-- END class="row row1"> here, to make sure QR img appears on the same line in desktop-->
+			      </div>  <!-- END class="row row1"> -->
 				  
 
 	 
@@ -200,10 +124,7 @@ JSON.stringify(e.lngLat);
 		
 		
 		
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-      <script src="js/mapbox_store_location.js"></script><!--  Core Mapbox JS -->
-	  <script src="js/changeStyleTheme.js"></script> <!-- change wallpapers,changeStyleTheme JS-->
+     
 	  
     </body>
 </html>

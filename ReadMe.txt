@@ -6,7 +6,7 @@ https://docs.mapbox.com/help/tutorials/custom-markers-gl-js/
 ========================================================
 
 
-
+#Marker image is set by css {.marker}
 
 ========================================================= 
 COMPOSER AUTOLOADER(and its vendor folder), for more details see {account931/miscellaneous_2018/composer_autoload/ReadMe.txt} 
