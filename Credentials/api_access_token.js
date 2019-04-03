@@ -1,5 +1,5 @@
 //MApBox Api access token
-//pk.eQ
-mapboxgl.accessToken = 'pk.ey';
+//pk.eyJ1IjoiYWNjb3VudDkzMSIsImEiOiJjaXgwOHFydHgwMDduMnlwZnF1OW52YmExIn0.tVYeU6k75W1Br3dnxxQbvQ
+mapboxgl.accessToken = 'pk.eyJ1IjoiYWNjb3VudDkzMSIsImEiOiJjaXgwOTVuOTEwMGFxMnVsczRwOWx0czhnIn0.YjZ5bpnh6jqTEk7cCJfrzw';
 
-//var access_tokennn_from_credentials = 'pk.';
+//var access_tokennn_from_credentials = 'pk.eyJ1IjoiYWNjb3VudDkzMSIsImEiOiJjaXgwOTVuOTEwMGFxMnVsczRwOWx0czhnIn0.YjZ5bpnh6jqTEk7cCJfrzw';

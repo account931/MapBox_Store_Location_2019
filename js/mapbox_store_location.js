@@ -2,7 +2,7 @@
 
 $(document).ready(function(){
 	
-	
+var DIRECTION_MODE = false;	
 	
 	
 	
@@ -33,6 +33,39 @@ map.addControl(new mapboxgl.GeolocateControl({
     showUserLocation: true //by default it is true, show a dot where the user's location is
 	}));
 //END Geolocation button control to add to map
+
+
+
+
+
+
+
+
+
+//Checking if GPS is turned, checks when u click location UI button
+// **************************************************************************************
+// **************************************************************************************
+//                                                                                     ** 
+$(document).on("click", '.mapboxgl-ctrl-geolocate', function() {   // this  click  is  used  to   react  to  newly generated cicles;
+    navigator.permissions && navigator.permissions.query({name: 'geolocation'}).then(function(PermissionStatus) {
+        if(PermissionStatus.state == 'granted'){
+            //allowed
+		    alert("GPS is OK");
+        }else{
+            //denied
+		     alert("GPS is OFF. Turn it ON");
+        }
+    });
+});
+// **                                                                                  **
+// **************************************************************************************
+// **************************************************************************************
+//END Checking if GPS is turned, checks when u click location UI button
+
+
+
+
+
 
 
 
@@ -136,20 +169,25 @@ map.on('click', function (e) {  //mousemove
 	}
 	
 	
-	 //adding a marker to a clicked position(if u clicked on the map, not marker)
+	 //adding a  new generated marker to a clicked position(if u clicked on the map, not marker)
 	 var el = document.createElement('div');
      el.className = 'marker markerAdded';  /* marker-clicked */ //class of created marker
 	 var allMarkers = []; //not used???
 	 
     //removes prev marker if it was set by click
-    /*if(typeof markerZ !== 'undefined'){
+    if(typeof markerZ !== 'undefined'){
 		markerZ.remove();
-	}*/
+	}
 	
-	 var markerZ = new mapboxgl.Marker(el)
+	 //new generated marker
+	 /*var*/ markerZ = new mapboxgl.Marker(el)
          .setLngLat(e.lngLat)  //set coords
 	     .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
-         .setHTML('<h3> Clicked Target </h3> <p>Save this point? <br><a href="#"> YES</a></p> <p>' + e.lngLat + '</p>'))
+         .setHTML('<h3> Clicked Target </h3>' +
+		          '<p>Save this point? <br><a href="#"><button> YES </button></a><br><br>' +
+				  '<a href="#"><button> Set as start</button></a>' +
+				  '<a href="#"><button> Set as end</a></button> </p>' +
+				  '<p>' + e.lngLat + '</p>'))
          .addTo(map);
 
     //allMarkers.push(markerZ); alert(allMarkers);
@@ -262,16 +300,24 @@ function getMatrix(){
 
 
 
-//DRAW ROUTE LINE
+//START DRAW ROUTE LINE
 //https://docs.mapbox.com/help/tutorials/getting-started-directions-api/
 //-----------------------------------------------------------------------------------------
 
+var BANDERI = [28.665445, 50.264004];
+var GLOBAL_ASHAN = [28.684956, 50.265008];
+
 // create a function to make a directions request
 function getRoute(end) {
+	//if checkbo DirectionMODE is OFF, stop any further
+	if(DIRECTION_MODE == false){
+	    return false;
+	}
+	
   // make a directions request using cycling profile
   // an arbitrary start will always be the same
   // only the end or destination will change
-  var start = [28.684956, 50.265008];
+  var start = GLOBAL_ASHAN; //it sets the START coords point GLOBAL
   var url = 'https://api.mapbox.com/directions/v5/mapbox/cycling/' + start[0] + ',' + start[1] + ';' + end[0] + ',' + end[1] + '?steps=true&geometries=geojson&access_token=' + mapboxgl.accessToken; // //mapboxgl.accessToken is from Credentials/api-access_token.js
 
   // make an XHR request https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
@@ -327,12 +373,84 @@ function getRoute(end) {
 
 
 
-var startt = [28.665445, 50.269004];
+var startt = GLOBAL_ASHAN; //NOT USED???? -merge it with getRoute() var start
 
 map.on('load', function() {
   // make an initial directions request that
   // starts and ends at the same location
-  getRoute(startt);
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  //------------AAAAAAAAAAAAAAAAAAAAAAAa
+  
+  function aaaab(){
+      var canvas = map.getCanvasContainer();
+      canvas.style.cursor = '';
+      var coords = BANDERI;  //END POINT ????
+      var end = {
+      type: 'FeatureCollection',
+          features: [{
+          type: 'Feature',
+          properties: {},
+          geometry: {
+              type: 'Point',
+              coordinates: coords
+          }
+          }
+          ]
+      };
+      if (map.getLayer('end')) {
+          map.getSource('end').setData(end);
+      } else {
+          map.addLayer({
+              id: 'end',
+              type: 'circle',
+              source: {
+              type: 'geojson',
+              data: {
+                  type: 'FeatureCollection',
+                  features: [{
+                  type: 'Feature',
+                  properties: {},
+                  geometry: {
+                      type: 'Point',
+                      coordinates: coords
+                  }
+                  }]
+              }
+              },
+              paint: {
+                  'circle-radius': 10,
+                  'circle-color': '#f30'
+              }
+         });
+     }
+  }
+  
+  //END -------------AAAAAAAAAAAAAAAAAAAAAAAa
+  
+  
+  
+  if(DIRECTION_MODE == true){  //if u toggled checkbox top left
+      getRoute(BANDERI); // arg is END POINT, START POINT IS SET INSIDE FUNCTION ITSELF
+      aaaab();
+  
+  //WHY 2 TIMES calling?
+   getRoute(BANDERI); // arg is END POINT, START POINT IS SET INSIDE FUNCTION ITSELF
+  
+  
+  
+  
 
   
   
@@ -350,7 +468,7 @@ map.on('load', function() {
           properties: {},
           geometry: {
             type: 'Point',
-            coordinates: startt
+            coordinates: [28.684956, 50.265008] //startt
           }
         }
         ]
@@ -366,6 +484,7 @@ map.on('load', function() {
   
   
   // Add ENDING red point to the map
+  /*
   map.addLayer({
     id: 'point2',
     type: 'circle',
@@ -389,62 +508,69 @@ map.on('load', function() {
       'circle-color': 'red' //'#3887be'
     }
   });
+  */
   
+} // END if(DIRECTION_MODE){
+	
   
-  
-  
-  // this is where the code from the next step will go
-  
+  // this is where the code from the next step will go -> DRAW GOES HERE
  // initialize the map canvas to interact with later
-var canvas = map.getCanvasContainer();
+ 
+  
 
 
-  map.on('click', function(e) {
-  var coordsObj = e.lngLat;
-  canvas.style.cursor = '';
-  var coords = Object.keys(coordsObj).map(function(key) {
-    return coordsObj[key];
-  });
-  var end = {
-    type: 'FeatureCollection',
-    features: [{
-      type: 'Feature',
-      properties: {},
-      geometry: {
-        type: 'Point',
-        coordinates: coords
-      }
-    }
-    ]
-  };
-  if (map.getLayer('end')) {
-    map.getSource('end').setData(end);
-  } else {
-    map.addLayer({
-      id: 'end',
-      type: 'circle',
-      source: {
-        type: 'geojson',
-        data: {
-          type: 'FeatureCollection',
+  map.on('click', function(e) {   
+    if(DIRECTION_MODE == true){  //if u toggled checkbox top left  
+      var canvas = map.getCanvasContainer();
+      var coordsObj = e.lngLat;
+      canvas.style.cursor = '';
+      var coordsClicked = Object.keys(coordsObj).map(function(key) {
+         return coordsObj[key];
+      });
+      var endCoords = {
+      type: 'FeatureCollection',
           features: [{
-            type: 'Feature',
-            properties: {},
-            geometry: {
+          type: 'Feature',
+          properties: {},
+          geometry: {
               type: 'Point',
-              coordinates: coords
-            }
-          }]
-        }
-      },
-      paint: {
-        'circle-radius': 10,
-        'circle-color': '#f30'
-      }
-    });
-  }
-  getRoute(coords);
+              coordinates: coordsClicked
+          }
+          }
+          ]
+      };
+      if (map.getLayer('end')) {
+          map.getSource('end').setData(endCoords);
+      } else {
+          map.addLayer({
+              id: 'end',
+              type: 'circle',
+              source: {
+              type: 'geojson',
+              data: {
+                  type: 'FeatureCollection',
+                  features: [{
+                  type: 'Feature',
+                  properties: {},
+                  geometry: {
+                      type: 'Point',
+                      coordinates: coordsClicked
+                  }
+                  }]
+              }
+              },
+              paint: {
+                  'circle-radius': 10,
+                  'circle-color': '#f30'
+              }
+         });
+     }
+	 
+     getRoute(coordsClicked);
+} // END if(DIRECTION_MODE){
 });
+
+
   // END this is where the code from the next step will go
 });
 
@@ -457,6 +583,45 @@ var canvas = map.getCanvasContainer();
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //DIRECTION MODE  -> ON/OFF. Changing Checkbox for reloop, checks if DIRECTION Mode is on
+	// **************************************************************************************
+    // **************************************************************************************
+    //                                                                                     ** 
+	$("#myCheck").click(function() { 
+	    if ($("#myCheck").is(':checked') ){  //if u selected looping in Checkbox
+	        DIRECTION_MODE = true; 
+            getRoute(BANDERI); 
+			aaaab();
+            getRoute(BANDERI);			
+	    } else {
+		   DIRECTION_MODE  = false;    
+	    }
+	});
+	 
+	// **                                                                                  **
+    // **************************************************************************************
+    // **************************************************************************************
+	
+	
+	
+	
 
 
 

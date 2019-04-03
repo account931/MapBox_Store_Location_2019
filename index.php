@@ -18,7 +18,8 @@ require 'vendor/autoload.php'; //Composer autoload
 
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> <!-- fa-fa images library-->
-      <link rel="stylesheet" type="text/css" media="all" href="css/mapbox_store_location.css">
+      <link rel="stylesheet" type="text/css" media="all" href="css/mapbox_store_location.css"> <!-- main CSS-->
+	  <link rel="stylesheet" type="text/css" media="all" href="css/switch_checkbox.css">  <!-- switch checkbox CSS-->
 	  
 	 <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js'></script> <!-- Mapbox L JS -->
      <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet' /> <!-- Mapbox L JS -->
@@ -45,8 +46,8 @@ require 'vendor/autoload.php'; //Composer autoload
 
 
 
-       <div id="headX" class="jumbotron text-center gradient alert-success my-background head-style" style ='background-color:#2ba6cb;'> <!--#2ba6cb;-->
-         <h1 id="h1Text"> <span id="textChange"> MapBox Store Loaction 2019</span></h1> 
+       <div id="headX" class="jumbotron text-center gradient alert-success my-background head-style" style ='background-color:#12ba18;'> <!--#2ba6cb;-->
+         <h1 id="h1Text"> <span id="textChange"> MapBox Store Location 2019</span></h1> 
 		 
 	   </div>
        
@@ -70,12 +71,21 @@ require 'vendor/autoload.php'; //Composer autoload
 				      <!-------------- Matrix window(distance details between two points) ----------------->
 				          <div class="col-sm-12 col-xs-12 " id="matrixWindow">
 				          </div>
-				          <br>
+				          <br><br>
 				      <!-------------- END  Matrix window(distance details between two points) ------------->
 				 
 				 
+				      
+					   <!-------------- Contol buttons ----------------->
+				          <div class="col-sm-12 col-xs-12 " id="">
+						  <button> Draw route btw 2 points</button>
+						  <button> GPS on</button>
+						  <button> Clear layer</button>
+				          </div>
+				          <br>
+				      <!-------------- END Contol buttons ------------->
 				 
-				 
+				   
 				   
 			      </div>  <!-- END class="row row1"> -->
 				  
@@ -96,6 +106,17 @@ require 'vendor/autoload.php'; //Composer autoload
 	              <!-----------------  Button to change Style theme------------------------->
 				  
 				  
+				  
+				  <!------------------- Checkbox Direction MODE, absolute position, top left ------------------->
+				  <div style="position:absolute; top:40px; left:1px;" title="Direction Mode">
+				   &nbsp;&nbsp;<br>
+				  <label class="switch">
+                      <input type="checkbox" id="myCheck">
+                          <span class="slider round"></span>
+                  </label> 
+				  <!--<i class="fa fa-rotate-right" style="font-size:30px;margin-left:20px;"></i>-->
+				  </div>
+                  <!-------------------  END Checkbox Direction MODEP, absolute position, top left ------------------------------------->
 				  
 				  
 				 
