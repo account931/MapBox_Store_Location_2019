@@ -227,9 +227,9 @@ function getMatrix(){
                 // do something;
 				//alert(JSON.stringify(data));
 				console.log(data);
-				var all_info = '';
+				var all_info = '<p><b>Matrix</b></p>';
 				for( var i = 0; i < data.destinations.length; i++){
-					all_info+= '<br>' + data.destinations[i].name + ', distance:' + (data.sources[i].distance/1000).toFixed(3) + ' km, duration:' + data.durations[i][1] + ' seconds';
+					all_info+= data.destinations[i].name + ', distance:' + (data.sources[i].distance/1000).toFixed(3) + ' km, duration:' + data.durations[i][1] + ' seconds <br>';
 				}
 				$("#matrixWindow").stop().fadeOut("slow",function(){ $(this).html(all_info)}).fadeIn(2000);
             },  //end success
@@ -317,7 +317,7 @@ function getRoute(end) {
   // make a directions request using cycling profile
   // an arbitrary start will always be the same
   // only the end or destination will change
-  var start = GLOBAL_ASHAN; //it sets the START coords point GLOBAL
+  var start = BANDERI; //GLOBAL_ASHAN; //it sets the START coords point GLOBAL
   var url = 'https://api.mapbox.com/directions/v5/mapbox/cycling/' + start[0] + ',' + start[1] + ';' + end[0] + ',' + end[1] + '?steps=true&geometries=geojson&access_token=' + mapboxgl.accessToken; // //mapboxgl.accessToken is from Credentials/api-access_token.js
 
   // make an XHR request https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
@@ -328,6 +328,24 @@ function getRoute(end) {
     var data = req.response.routes[0];
     var route = data.geometry.coordinates;
 	alert(route);
+	
+	
+	
+	//SET instructions to div class='instructions'-----------
+	// get the sidebar and add the instructions
+    var instructions = document.getElementById('instructions');
+	instructions.className += ' bordered';
+    var steps = data.legs[0].steps;
+
+    var tripInstructions = [];
+    for (var i = 0; i < steps.length; i++) {
+        tripInstructions.push('<br><li>' + steps[i].maneuver.instruction) + '</li>';
+       //instructions.innerHTML = '<h3>Directions API</h3><span class="duration">Trip duration: ' + Math.floor(data.duration / 60) + ' min 🚴 </span>' + tripInstructions;
+	}
+	var t = '<h3>Directions API</h3><span class="duration">Trip duration: ' + Math.floor(data.duration / 60) + ' min 🚴 </span>' + tripInstructions;
+	$("#instructions").stop().fadeOut("slow",function(){ $(this).html(t)}).fadeIn(2000);
+	//END SET instructions to div class='instructions'-------
+	
     var geojson = {
       type: 'Feature',
       properties: {},

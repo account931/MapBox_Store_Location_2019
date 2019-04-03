@@ -46,7 +46,7 @@ require 'vendor/autoload.php'; //Composer autoload
 
 
 
-       <div id="headX" class="jumbotron text-center gradient alert-success my-background head-style" style ='background-color:#12ba18;'> <!--#2ba6cb;-->
+       <div id="headX" class="jumbotron text-center gradient alert-success my-background head-style" style ='background-color:#2ba6cb;'> <!--#2ba6cb;-->
          <h1 id="h1Text"> <span id="textChange"> MapBox Store Location 2019</span></h1> 
 		 
 	   </div>
@@ -69,18 +69,27 @@ require 'vendor/autoload.php'; //Composer autoload
 				 
 				 
 				      <!-------------- Matrix window(distance details between two points) ----------------->
-				          <div class="col-sm-12 col-xs-12 " id="matrixWindow">
+				          <div class="col-sm-12 col-xs-12 bordered" id="matrixWindow">
 				          </div>
-				          <br><br>
 				      <!-------------- END  Matrix window(distance details between two points) ------------->
 				 
 				 
+				 
+				       <!-------------- Turn by turn instructions ----------------->
+				          <div class="col-sm-12 col-xs-12" id="instructions">
+				          </div>
+				      <!-------------- END Turn by turn instructions ------------->
+					  
+					  
+					  
 				      
-					   <!-------------- Contol buttons ----------------->
-				          <div class="col-sm-12 col-xs-12 " id="">
+					  <!-------------- Contol buttons ----------------->
+					      <br><br>
+				          <div class="col-sm-12 col-xs-12" id="">
 						  <button> Draw route btw 2 points</button>
 						  <button> GPS on</button>
 						  <button> Clear layer</button>
+						  <button> Clear InfoDivs</button>
 				          </div>
 				          <br>
 				      <!-------------- END Contol buttons ------------->
