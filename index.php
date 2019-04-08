@@ -19,7 +19,8 @@ require 'vendor/autoload.php'; //Composer autoload
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> <!-- fa-fa images library-->
       <link rel="stylesheet" type="text/css" media="all" href="css/mapbox_store_location.css"> <!-- main CSS-->
-	  <link rel="stylesheet" type="text/css" media="all" href="css/switch_checkbox.css">  <!-- switch checkbox CSS-->
+	  <link rel="stylesheet" type="text/css" media="all" href="css/switch_checkbox.css">  <!-- switch checkbox CSS--> 
+	  <link rel="stylesheet" type="text/css" media="all" href="css/infoBox.css">  <!-- infoBox CSS-->
 	  
 	 <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js'></script> <!-- Mapbox L JS -->
      <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet' /> <!-- Mapbox L JS -->
@@ -29,7 +30,9 @@ require 'vendor/autoload.php'; //Composer autoload
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	  <script src="Credentials/api_access_token.js"></script><!--  MapBox Access token -->
       <script src="js/mapbox_store_location.js"></script><!--  Core Mapbox JS -->
-	  <script src="js/changeStyleTheme.js"></script> <!-- change wallpapers,changeStyleTheme JS-->
+	  <script src="js/changeStyleTheme.js"></script> <!-- change wallpapers,changeStyleTheme JS-->  
+	  <script src="js/check_gps_connection.js"></script> <!-- check_gps_connection JS-->
+	  <script src="js/direction_api.js"></script> <!-- Direction API JS-->
 	 
 	  <meta name="viewport" content="width=device-width" />
 	  
@@ -48,7 +51,7 @@ require 'vendor/autoload.php'; //Composer autoload
 
        <div id="headX" class="jumbotron text-center gradient alert-success my-background head-style" style ='background-color:#2ba6cb;'> <!--#2ba6cb;-->
          <h1 id="h1Text"> <span id="textChange"> MapBox Store Location 2019</span></h1> 
-		 
+         <span id="start_end_direction_info"></span> <!-- start/end coordinates for direction API-->		 
 	   </div>
        
          <div class="wrapper grey">
@@ -95,6 +98,12 @@ require 'vendor/autoload.php'; //Composer autoload
 				      <!-------------- END Contol buttons ------------->
 				 
 				   
+				      <!-------------- infoBox, display the status of running, shows info ----------------->
+				      <div id="infoBox" class="col-sm-8 col-xs-8">
+					      <span class="close-span">x</span>
+					  </div>
+					  <!-------------- END infoBox, display the status of running, shows info ----------------->
+					  
 				   
 			      </div>  <!-- END class="row row1"> -->
 				  

@@ -1,3 +1,5 @@
+var clickedCoords; //coords of clicked place
+
 (function(){ //START IIFE (Immediately Invoked Function Expression)
 
 $(document).ready(function(){
@@ -42,25 +44,6 @@ map.addControl(new mapboxgl.GeolocateControl({
 
 
 
-//Checking if GPS is turned, checks when u click location UI button
-// **************************************************************************************
-// **************************************************************************************
-//                                                                                     ** 
-$(document).on("click", '.mapboxgl-ctrl-geolocate', function() {   // this  click  is  used  to   react  to  newly generated cicles;
-    navigator.permissions && navigator.permissions.query({name: 'geolocation'}).then(function(PermissionStatus) {
-        if(PermissionStatus.state == 'granted'){
-            //allowed
-		    alert("GPS is OK");
-        }else{
-            //denied
-		     alert("GPS is OFF. Turn it ON");
-        }
-    });
-});
-// **                                                                                  **
-// **************************************************************************************
-// **************************************************************************************
-//END Checking if GPS is turned, checks when u click location UI button
 
 
 
@@ -128,7 +111,10 @@ geojson.features.forEach(function(marker) {
   new mapboxgl.Marker(el)
     .setLngLat(marker.geometry.coordinates)
 	.setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
-    .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
+    .setHTML('<h3>' + marker.properties.title + '</h3>' + 
+	         '<p>' + marker.properties.description + '</p>' +
+			 '<a href="#"><button class="btn btn-success">To route</button></a>&nbsp;' +
+			 '<a href="#"><button class="btn btn-danger">Delete</button></a>'))
     .addTo(map);
 });
 // END add markers to map from predefined array{var geojson}
@@ -144,7 +130,7 @@ geojson.features.forEach(function(marker) {
 
 
 
-//On map click-> Get coordinates  + Place a marker to map-----------------------------------------------------------------------
+//On map click-> Get coordinates + Place a marker to map + opens marker's pop-up automatically without clicking on marker-------------------------------------
 var markerZ; //global var  to be able remove prev markers
 
 map.on('click', function (e) {  //mousemove 
@@ -179,17 +165,33 @@ map.on('click', function (e) {  //mousemove
 		markerZ.remove();
 	}
 	
-	 //new generated marker
+	
+	//var for marker pop-uo
+	var popuppZ;
+	
+	clickedCoords = e.lngLat; //coords of clicked place
+	
+	 //Set data to new generated marker, when u click on any empty place on the map
 	 /*var*/ markerZ = new mapboxgl.Marker(el)
          .setLngLat(e.lngLat)  //set coords
-	     .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+         .setPopup(popuppZ = new mapboxgl.Popup({ offset: 25 }) // add {var popuppZ} to be able to open it automatically
          .setHTML('<h3> Clicked Target </h3>' +
-		          '<p>Save this point? <br><a href="#"><button> YES </button></a><br><br>' +
-				  '<a href="#"><button> Set as start</button></a>' +
-				  '<a href="#"><button> Set as end</a></button> </p>' +
+		          '<p>Save this point? <br><a href="#"><button class="btn btn-danger"> YES </button></a><br><br>' +
+				  '<a href="#"><button class="btn btn-success" id="addRoute"> Add to route</button></a>' +
+				  //'<a href="#"><button> Set as end</a></button> </p>' +
 				  '<p>' + e.lngLat + '</p>'))
          .addTo(map);
-
+		 
+		 popuppZ.addTo(map); //opens pop-up automatically, without clicking on the marker
+		 
+		 //show pop-up
+		 // Populate the popup and set its coordinates
+         // based on the feature found.
+         /*new mapboxgl.Popup().
+		 .setLngLat(e.lngLat)
+         .setHTML("description")
+         .addTo(map);
+          */
     //allMarkers.push(markerZ); alert(allMarkers);
 	
 	//allMarkers[0].remove();
@@ -205,7 +207,7 @@ map.on('click', function (e) {  //mousemove
 
 
 //gets distance details between two points
-getMatrix();
+//getMatrix();  //!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
 
