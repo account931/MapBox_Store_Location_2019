@@ -21,6 +21,7 @@ require 'vendor/autoload.php'; //Composer autoload
       <link rel="stylesheet" type="text/css" media="all" href="css/mapbox_store_location.css"> <!-- main CSS-->
 	  <link rel="stylesheet" type="text/css" media="all" href="css/switch_checkbox.css">  <!-- switch checkbox CSS--> 
 	  <link rel="stylesheet" type="text/css" media="all" href="css/infoBox.css">  <!-- infoBox CSS-->
+	  <link rel="stylesheet" type="text/css" media="all" href="css/preloader.css">  <!-- Saving Preloader CSS-->
 	  
 	 <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js'></script> <!-- Mapbox L JS -->
      <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet' /> <!-- Mapbox L JS -->
@@ -33,6 +34,7 @@ require 'vendor/autoload.php'; //Composer autoload
 	  <script src="js/changeStyleTheme.js"></script> <!-- change wallpapers,changeStyleTheme JS-->  
 	  <script src="js/check_gps_connection.js"></script> <!-- check_gps_connection JS-->
 	  <script src="js/direction_api.js"></script> <!-- Direction API JS-->
+	  <script src="js/add_location.js"></script> <!--Save Location to DB JS-->
 	 
 	  <meta name="viewport" content="width=device-width" />
 	  
@@ -54,15 +56,21 @@ require 'vendor/autoload.php'; //Composer autoload
          <span id="start_end_direction_info"></span> <!-- start/end coordinates for direction API-->		 
 	   </div>
        
-         <div class="wrapper grey">
+         <div class="wrapper grey App">
     	     <div class="container">
 		         <div class="row row1">
 			 
 				 
 				 
-				      <!-------------- Mapbox main window ------------->
+				      
 				    
-				          <div class="col-sm-12 col-xs-12 " id="">
+				        
+					  
+					  
+				 
+				      <!-------------- Mapbox main window ------------->
+				          <div class="col-sm-12 col-xs-12" id="">
+						      <div id='ETA' class="col-sm-6 col-xs-6"></div>  <!---- ETA hidden window ------>
 						      <div id='map' style='width: 80%; height: 400px;'></div> <!-- Maps Window goes here -->
 							  <pre id='info'></pre> <!-- Mouse coords go here -->
 				          </div>
@@ -97,12 +105,24 @@ require 'vendor/autoload.php'; //Composer autoload
 				          <br>
 				      <!-------------- END Contol buttons ------------->
 				 
+				 
+				 
 				   
 				      <!-------------- infoBox, display the status of running, shows info ----------------->
 				      <div id="infoBox" class="col-sm-8 col-xs-8">
 					      <span class="close-span">x</span>
 					  </div>
 					  <!-------------- END infoBox, display the status of running, shows info ----------------->
+					  
+					  
+					  <!----------- Hidden loading copy indicator, hidden by default  ------>
+					  <div class="error-parent">
+		                  <span id='error_loading'>
+			                  <img src="images/loader.gif"  class="error-img" alt="logo" />  
+		                  </span>  
+		              </div>
+					  <!----------- Hidden loading copy indicator ------->
+
 					  
 				   
 			      </div>  <!-- END class="row row1"> -->
@@ -112,7 +132,21 @@ require 'vendor/autoload.php'; //Composer autoload
     		</div><!-- /.container -->	  		
          </div><!-- /.wrapper -->
         
-                
+               
+
+
+
+           <!----------- Hidden preloader indicator when saving, hidden by default, must be outside class="App"  ------>
+					  <div class="error-parent">
+					      <h2> Saving </h2>
+		                  <span id='error_loading'>
+			                  <img src="images/loader.gif"  class="error-img" alt="logo" />  
+		                  </span>  
+		              </div>
+			<!----------- Hidden loading copy indicator ------->
+
+
+					  
           <br><br><br> <br><br><br>
 
 				

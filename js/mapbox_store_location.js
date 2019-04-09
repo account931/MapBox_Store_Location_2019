@@ -1,4 +1,6 @@
-var clickedCoords; //coords of clicked place
+var clickedCoords; //coords of clicked place, global to use in ??
+var map; //global to use in direction-api.js
+var markerZ; //global to use in direction-api.js
 
 (function(){ //START IIFE (Immediately Invoked Function Expression)
 
@@ -12,7 +14,7 @@ var DIRECTION_MODE = false;
 	
 //Access api is in Credentials/api_access_token!!!!
 //Creats map with center
-var map = new mapboxgl.Map({
+/*var*/ map = new mapboxgl.Map({
 container: 'map', // container id
 center: [28.665445, 50.264004], // starting position [lng, lat]
 zoom: 13, // starting zoom
@@ -130,8 +132,8 @@ geojson.features.forEach(function(marker) {
 
 
 
-//On map click-> Get coordinates + Place a marker to map + opens marker's pop-up automatically without clicking on marker-------------------------------------
-var markerZ; //global var  to be able remove prev markers
+//On map click(om any empty place)-> Get coordinates + Place a marker to map + opens marker's pop-up automatically without clicking on marker-------------------------------------
+//var markerZ; //global var  to be able remove prev markers
 
 map.on('click', function (e) {  //mousemove 
 
@@ -176,8 +178,8 @@ map.on('click', function (e) {  //mousemove
          .setLngLat(e.lngLat)  //set coords
          .setPopup(popuppZ = new mapboxgl.Popup({ offset: 25 }) // add {var popuppZ} to be able to open it automatically
          .setHTML('<h3> Clicked Target </h3>' +
-		          '<p>Save this point? <br><a href="#"><button class="btn btn-danger"> YES </button></a><br><br>' +
-				  '<a href="#"><button class="btn btn-success" id="addRoute"> Add to route</button></a>' +
+		          '<p>Save this point? <br><a href="#"><button class="btn btn-danger" id="savePlace">Save</button></a> '  +
+				  '<a href="#"><button class="btn btn-success add-route-btn" id="addRoute"> Add to route</button></a>' +
 				  //'<a href="#"><button> Set as end</a></button> </p>' +
 				  '<p>' + e.lngLat + '</p>'))
          .addTo(map);

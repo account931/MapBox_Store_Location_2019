@@ -23,3 +23,26 @@ For classes that don't fit PSR-4 (classes without namespace) add section {"class
 CLI-> $ composer dump-autoload -o -> This CLI must be run after each composer edits to update the autoload.
 
 =========================================================
+
+
+
+
+
+
+
+========================================================
+PRELOADER(blurs background + show gif loader)
+
+To add preloader onClick:
+  1.Put content u want to blur into div with class="App"
+  2.Put loader gif image to div with class="error-parent". Must be outside <div class="App">
+  3.Add to CSS-> .blur{filter: blur(15px);} + .error-parent{display:none;}
+  4. JS->
+  $('.App').addClass('blur');  //blur the background
+  $(".error-parent").fadeIn(2500); //show error gif from <Error/>
+		
+  setTimeout(function(){
+      $('.App').removeClass('blur'); //removes blur from background
+      $(".error-parent").fadeOut(1000); //hide error gif from <Error/>
+   }, 4000); // A delay of 1000ms
+============================================================
