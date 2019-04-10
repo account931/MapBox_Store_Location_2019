@@ -21,7 +21,7 @@ require 'vendor/autoload.php'; //Composer autoload
       <link rel="stylesheet" type="text/css" media="all" href="css/mapbox_store_location.css"> <!-- main CSS-->
 	  <link rel="stylesheet" type="text/css" media="all" href="css/switch_checkbox.css">  <!-- switch checkbox CSS--> 
 	  <link rel="stylesheet" type="text/css" media="all" href="css/infoBox.css">  <!-- infoBox CSS-->
-	  <link rel="stylesheet" type="text/css" media="all" href="css/preloader.css">  <!-- Saving Preloader CSS-->
+	  <link rel="stylesheet" type="text/css" media="all" href="css/preloader.css">  <!-- Preloader CSS-->
 	  
 	 <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js'></script> <!-- Mapbox L JS -->
      <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet' /> <!-- Mapbox L JS -->
@@ -115,13 +115,7 @@ require 'vendor/autoload.php'; //Composer autoload
 					  <!-------------- END infoBox, display the status of running, shows info ----------------->
 					  
 					  
-					  <!----------- Hidden loading copy indicator, hidden by default  ------>
-					  <div class="error-parent">
-		                  <span id='error_loading'>
-			                  <img src="images/loader.gif"  class="error-img" alt="logo" />  
-		                  </span>  
-		              </div>
-					  <!----------- Hidden loading copy indicator ------->
+					  
 
 					  
 				   
@@ -138,7 +132,7 @@ require 'vendor/autoload.php'; //Composer autoload
 
            <!----------- Hidden preloader indicator when saving, hidden by default, must be outside class="App"  ------>
 					  <div class="error-parent">
-					      <h2> Saving </h2>
+					      <h2 id="save_delete_text">  </h2>
 		                  <span id='error_loading'>
 			                  <img src="images/loader.gif"  class="error-img" alt="logo" />  
 		                  </span>  

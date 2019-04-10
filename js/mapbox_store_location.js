@@ -1,6 +1,6 @@
 var clickedCoords; //coords of clicked place, global to use in ??
 var map; //global to use in direction-api.js
-var markerZ; //global to use in direction-api.js
+var popuppZ; //global to use in direction-api.js
 
 (function(){ //START IIFE (Immediately Invoked Function Expression)
 
@@ -41,6 +41,48 @@ map.addControl(new mapboxgl.GeolocateControl({
 
 
 
+/*
+map.on('load', function() {
+    map.addSource("mydata", {
+        type: "geojson",
+        data: "https://api.mapbox.com/datasets/v1/account931/cjub7lk3l12ce2wo27ccoopdl/features?access_token=pk.eyJ1IjoiYWNjb3VudDkzMSIsImEiOiJjaXgwOTVuOTEwMGFxMnVsczRwOWx0czhnIn0.YjZ5bpnh6jqTEk7cCJfrzw",
+        cluster: true,
+        clusterMaxZoom: 14,
+        clusterRadius: 120
+    });
+	});
+*/
+
+
+
+
+
+//getting Dataset markers values
+ $.ajax({
+            url: 'https://api.mapbox.com/datasets/v1/account931/cjub7lk3l12ce2wo27ccoopdl/features?access_token=' + mapboxgl.accessToken,  //mapboxgl.accessToken is from Credentials/api-access_token.js
+            //url:'https://api.mapbox.com/optimized-trips/v1/mapbox/driving/28.684956,50.265008;28.662900,50.262885?access_token=' +  mapboxgl.accessToken, 
+			
+			type: 'GET', //if {POST} it gets CORS error
+			dataType: 'json', // without this it returned string(that can be alerted), now it returns object
+			//passing the city
+            data: { 
+			    //serverCity:window.cityX
+			},
+            success: function(data) {
+                // do something;
+				//alert(JSON.stringify(data));
+				console.log(data);
+				convert_Dataset_to_map(data);
+				
+				
+				
+            },  //end success
+			error: function (error) {
+				alert("Dataset error-> " + error); 
+				//$("#weatherResult").stop().fadeOut("slow",function(){ $(this).html("<h4 style='color:red;padding:3em;'>ERROR!!! <br> NO CITY FOUND</h4>")}).fadeIn(2000);
+            }	
+        });
+//END getting Dataset markers values
 
 
 
@@ -51,14 +93,10 @@ map.addControl(new mapboxgl.GeolocateControl({
 
 
 
-
-
-
-
-
-
-//JSON DATA -> just object with coords to add markers to map onLoad
-var geojson = {
+//NOT USED -> switched to Datasets //JSON DATA -> used to be just object with predifined coords to add markers to map onLoad
+//NOT USED -> switched to Datasets
+/*
+var geojson_PREV = {
   type: 'FeatureCollection',
   features: [{
     type: 'Feature',
@@ -69,18 +107,19 @@ var geojson = {
     properties: {
       title: 'Mapbox pop-up 1',
       description: 'Zhytomyr test marker',
-	   /* icon: {
-        iconUrl: 'https://www.mapbox.com/mapbox.js/assets/images/astronaut1.png',
-        iconSize: [50, 50], // size of the icon
-        iconAnchor: [25, 25], // point of the icon which will correspond to marker's location
-        popupAnchor: [0, -25], // point from which the popup should open relative to the iconAnchor
-        className: 'dot'
-      }
-	  */
+	    //icon: {
+          //iconUrl: 'https://www.mapbox.com/mapbox.js/assets/images/astronaut1.png',
+          //iconSize: [50, 50], // size of the icon
+          //iconAnchor: [25, 25], // point of the icon which will correspond to marker's location
+          //popupAnchor: [0, -25], // point from which the popup should open relative to the iconAnchor
+          //className: 'dot'
+        //}
+	  
 	  
 	  
     }
   },
+  
   //end of marker 1
   {
     type: 'Feature',
@@ -94,31 +133,33 @@ var geojson = {
     }
   }]
 };
+*/
+//END NOT USED -> switched to Datasets //JSON DATA -> just object with coords to add markers to map onLoad
 
 
 
 
 
+//function to convert data received from Dataset to markers on map
+function convert_Dataset_to_map(geojson){
+   //add markers to map from predefined array{var geojson}
+   geojson.features.forEach(function(marker) {
 
+      // create a HTML element for each feature
+      var el = document.createElement('div');
+      el.className = 'marker';
 
-
-// add markers to map from predefined array{var geojson}
-geojson.features.forEach(function(marker) {
-
-  // create a HTML element for each feature
-  var el = document.createElement('div');
-  el.className = 'marker';
-
-  // make a marker for each feature and add to the map
-  new mapboxgl.Marker(el)
+     // make a marker for each feature and add to the map
+     new mapboxgl.Marker(el)
     .setLngLat(marker.geometry.coordinates)
 	.setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
     .setHTML('<h3>' + marker.properties.title + '</h3>' + 
 	         '<p>' + marker.properties.description + '</p>' +
-			 '<a href="#"><button class="btn btn-success">To route</button></a>&nbsp;' +
-			 '<a href="#"><button class="btn btn-danger">Delete</button></a>'))
+			 '<a href="#"><button class="btn btn-success">To route</button></a>&nbsp;' +  //id="addRoute"
+			 '<a href="#"><button class="btn btn-danger" id="deletePlace">Delete</button></a>'))
     .addTo(map);
-});
+    });
+}
 // END add markers to map from predefined array{var geojson}
 
 
@@ -169,7 +210,7 @@ map.on('click', function (e) {  //mousemove
 	
 	
 	//var for marker pop-uo
-	var popuppZ;
+	//var popuppZ; //went outside IIFE
 	
 	clickedCoords = e.lngLat; //coords of clicked place
 	

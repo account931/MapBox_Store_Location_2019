@@ -8,6 +8,34 @@ https://docs.mapbox.com/help/tutorials/custom-markers-gl-js/
 
 #Marker image is set by css {.marker}
 
+
+
+
+
+
+
+
+=========================================================
+DATASETS
+This Mapbox works on Datasets- an on-line equivalent of SQL DB.
+This datasets are stored connected to your MapBox account(i.e account931) and retrieved with ajax(by adding to API URL endpoint your access-token + dataset ID).
+Dataset ID is not the name u call it, it is auto assigned by mapBox (i.e u name it "DSCI4", but it's id is {cjub7lk3l12ce2wo27cco****}).
+To create Dataset:
+  -go https://studio.mapbox.com;
+  - add data by clicking on map and assigning properties;
+  -export to tileset; ???
+  -copy generated ID and retrieve your markers by ajax function(for example onLoad)-> https://api.mapbox.com/datasets/v1/account931/cjub7lk3l12ce2wo27*****/features?access_token=' + mapboxgl.accessToken 
+  -on ajax success use function {convert_Dataset_to_map()} to convert Datasets values to markers on maps, properties names in DATASET must be the same as in  function {convert_Dataset_to_map()}
+
+
+=======================================================
+
+
+
+
+
+
+
 ========================================================= 
 COMPOSER AUTOLOADER(and its vendor folder), for more details see {account931/miscellaneous_2018/composer_autoload/ReadMe.txt} 
 

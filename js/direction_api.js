@@ -56,7 +56,9 @@ var popuppZ;//global from mapbox_store_location.js
 	 
 	 
 	});//end click
-		
+	// **                                                                                  **
+    // **************************************************************************************
+    // **************************************************************************************	
 		
 		
 	
@@ -65,14 +67,28 @@ var popuppZ;//global from mapbox_store_location.js
 
 
 
-    //Clears "From:" and "To:" info window in the header
+    //Clears "From:" and "To:" info window in the header + clears ETA + clears Direction layer
 	// **************************************************************************************
     // **************************************************************************************
     //                                                                                     ** 
      $(document).on("click", '#start_end_direction_info', function() {   // this  click  is  used  to   react  to  newly generated cicles;	
 	     $("#start_end_direction_info").stop().fadeOut("slow",function(){ $(this).html("")}).fadeIn(2000); //clears 
-		 start_end_array = [];
+		 start_end_array = [];  //reset From/to array
+		 
+		 //clears ETS
+		 $("#ETA").stop().fadeOut("slow",function(){ $(this).html('')}).fadeIn(2000);
+		 
+		 //clears Direction API line layer(line route)
+		 if (map.getLayer('end')) {
+			  map.removeLayer('route'); //to clear Direction Api Layer, u have to remove both Layer and Source. Layer must be removed FIRST!!!!!!!!!!!!!
+			  map.removeSource('route');
+              map.removeLayer('end'); 
+			  map.removeSource('end');
+		 }
      });//end click
+	// **                                                                                  **
+    // **************************************************************************************
+    // **************************************************************************************
      //END Clears "From:" and "To:" info window in the header
 	 
 	 
@@ -82,7 +98,7 @@ var popuppZ;//global from mapbox_store_location.js
 	 
 	 
 	 
-	 
+	//Just bundle function to run getRoute(). It must be run 2 times in order to draw a line between 2 points
 	// **************************************************************************************
     // **************************************************************************************
     //                                                                                     ** 
@@ -92,7 +108,9 @@ var popuppZ;//global from mapbox_store_location.js
 		 getRoute(start_end_array[0], start_end_array[1]); //start_end_array stores 2 els-> from & to, i.e [[20.454,50.4546], [20.454,50.4546]]
 		 getRoute(start_end_array[0], start_end_array[1]);
 	 }
-	 
+	// **                                                                                  **
+    // **************************************************************************************
+    // **************************************************************************************
 	 
 	 
 	 
@@ -110,7 +128,7 @@ function getRoute(startX, end) {
   // only the end or destination will change
   var start = startX; //BANDERI; //GLOBAL_ASHAN; //it sets the START coords point GLOBAL
   //alert("start[0]-> " + end[1]);
-  var url = 'https://api.mapbox.com/directions/v5/mapbox/cycling/' + start[0] + ',' + start[1] + ';' + end[0] + ',' + end[1] + '?steps=true&geometries=geojson&access_token=' + mapboxgl.accessToken; // //mapboxgl.accessToken is from Credentials/api-access_token.js
+  var url = 'https://api.mapbox.com/directions/v5/mapbox/driving/' + start[0] + ',' + start[1] + ';' + end[0] + ',' + end[1] + '?steps=true&geometries=geojson&access_token=' + mapboxgl.accessToken; // //mapboxgl.accessToken is from Credentials/api-access_token.js
 
   // make an XHR request https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
   var req = new XMLHttpRequest();
@@ -136,6 +154,7 @@ function getRoute(startX, end) {
 	}
 	var t = '<h3>Directions API</h3><span class="duration">Trip duration: ' + Math.floor(data.duration / 60) + ' min  </span>' + tripInstructions;
 	$("#instructions").stop().fadeOut("slow",function(){ $(this).html(t)}).fadeIn(2000);
+	
 	//html() ETA
 	$("#ETA").stop().fadeOut("slow",function(){ $(this).html( '<p><i class="fa fa-share-square-o" style="font-size:30px"></i> Route is <b>' + Math.floor(data.duration / 60) + ' min </b></p>')}).fadeIn(2000); //show ETA above the map
 	//END SET instructions to div class='instructions'-------

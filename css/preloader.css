@@ -2,8 +2,8 @@
 
 
 /* Blurs the screen */
-{
-	transition-duration: 1s;
+.blur{
+	transition-duration: 0s;
 	-moz-filter: blur(15px);
      -ms-filte.blurr: blur(15px);
      -o-filter: blur(15px);
@@ -29,7 +29,12 @@
 @media screen and (max-width: 640px) {
 	.error-parent{top:14em; left:20%;}
 	.error-img{width:99%;}
-
+    #save_delete_text{color:white;}
 }  
  
 /*  ----------------Mobile */
+
+
+#save_delete_text{
+	margin-left:30%;
+}
