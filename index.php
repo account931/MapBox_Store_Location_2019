@@ -34,7 +34,7 @@ require 'vendor/autoload.php'; //Composer autoload
 	  <script src="js/changeStyleTheme.js"></script> <!-- change wallpapers,changeStyleTheme JS-->  
 	  <script src="js/check_gps_connection.js"></script> <!-- check_gps_connection JS-->
 	  <script src="js/direction_api.js"></script> <!-- Direction API JS-->
-	  <script src="js/add_location.js"></script> <!--Save Location to DB JS-->
+	  <script src="js/add_marker.js"></script> <!--Save Location marker to DB JS-->
 	 
 	  <meta name="viewport" content="width=device-width" />
 	  

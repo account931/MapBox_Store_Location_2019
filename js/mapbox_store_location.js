@@ -6,13 +6,13 @@ var popuppZ; //global to use in direction-api.js
 
 $(document).ready(function(){
 	
-var DIRECTION_MODE = false;	
+var DIRECTION_MODE = false;	 //mine, activated in checkbox switch top left
 	
 	
 	
 	
 	
-//Access api is in Credentials/api_access_token!!!!
+//Access api key is in Credentials/api_access_token!!!!
 //Creats map with center
 /*var*/ map = new mapboxgl.Map({
 container: 'map', // container id
@@ -57,7 +57,7 @@ map.on('load', function() {
 
 
 
-//getting Dataset markers values
+//getting Dataset markers values from Dataset(initially created in Studio)
  $.ajax({
             url: 'https://api.mapbox.com/datasets/v1/account931/cjub7lk3l12ce2wo27ccoopdl/features?access_token=' + mapboxgl.accessToken,  //mapboxgl.accessToken is from Credentials/api-access_token.js
             //url:'https://api.mapbox.com/optimized-trips/v1/mapbox/driving/28.684956,50.265008;28.662900,50.262885?access_token=' +  mapboxgl.accessToken, 
@@ -345,7 +345,7 @@ function getMatrix(){
 
 
 
-//START DRAW ROUTE LINE
+//START DRAW ROUTE LINE (works only for a hardcoded start position when u switched checkbox on()top left)
 //https://docs.mapbox.com/help/tutorials/getting-started-directions-api/
 //-----------------------------------------------------------------------------------------
 
