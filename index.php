@@ -27,7 +27,8 @@ require 'vendor/autoload.php'; //Composer autoload
      <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet' /> <!-- Mapbox L JS -->
 	 
 	 
-	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	  <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>-->
+	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	  <script src="Credentials/api_access_token.js"></script><!--  MapBox Access token -->
       <script src="js/mapbox_store_location.js"></script><!--  Core Mapbox JS -->
@@ -128,6 +129,56 @@ require 'vendor/autoload.php'; //Composer autoload
         
                
 
+			   
+			   
+			   
+			   
+		 
+		 
+		 
+	<!-----------------  Modal window "Buy Ticket" with info and fields to put Name and E-MAil------------------------------>
+      <div id="myModalZ" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+          <!-- Modal content-->
+              <div class="modal-content">
+                  <div class="modal-header">
+                       <button type="button" class="close" data-dismiss="modal">&times;</button>
+                       <h4 class="modal-title">Save location to markers </h4>
+                  </div>
+                  <div class="modal-body">
+				      <center>
+				      <img src="images/location.svg" alt="img"/ class="img-small"><br> 
+                      <p><br><br>
+							<label for="formLocationName">Location name:</label>
+                            <p class="form-control inputZ" id="formLocationName"></p>
+							<br>
+		                    <label for="formDescription">Location description:</label>
+                            <p class="form-control inputZ" id="formDescription"></p>
+							<br>
+		                    
+							<br>
+					  </p>
+					  </center>
+                  </div>
+                  <div class="modal-footer">
+				       <!----- CheckBox to save in $_Cookies[] ----->
+					   <input type="checkbox" name="cookies" id="checkX" value="saveCookies" checked>Keep in history(cookies)<br><br>
+				       <button type="button" class="btn btn-default" id="savePlaceFinal">Save</button>
+                       <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+              </div>
+
+         </div>
+     </div>
+   <!-----------------  END Modal window "Buy Ticket" with info and fields to put Name and E-MAil---------------------------->
+			   
+			   
+			   
+			   
+			   
+			   
+			   
+			   
 
 
            <!----------- Hidden preloader indicator when saving, hidden by default, must be outside class="App"  ------>

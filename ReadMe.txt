@@ -1,6 +1,12 @@
 Works on Mapbox GL JS.
 Example of GMaps store_locator application but working on Mapbox GL JS
+==========================================================
+Mapbox JS GL API.
+Links to Api manual: https://docs.mapbox.com/api/maps/#datasets
+#This is an alternative version of Gmaps Store_Locator based on Mapbox GL Api.
+#Stack: php cURL, IIFE, namespace, composer autoload, git.
 
+==========================================================
 https://docs.mapbox.com/mapbox-gl-js/overview/
 https://docs.mapbox.com/help/tutorials/custom-markers-gl-js/
 ========================================================
@@ -32,6 +38,20 @@ To create Dataset:
 
 
 
+#Button to get current location is a part of Api (no work from my side).
+
+#Markers are stored in Api Datasets->Features(special Api storage, that can be used instead of SQL).
+
+#On every load, application makes ajax request to Dataset to get all Features (markers). On ajax success we use function {} to convert dataset features to markers.
+
+#To add new Feature (marker) to Datasets  Api suggests using PUT method. I tried using ajax PUT, but failed. Therefore, now when u add a new marker (js/add_marker.js), it makes ajax POST request to my own php script  (ajax_pho_scripts/add_marker.php). Php script uses cURL lib to send PUT request with body (marker info) to Mapbox Api.
+Alternatively, it can be done manually cia Studio.
+
+#Every click on empty map (except for click on .marker) envokes pop-up with buttons (Save; Add to route).
+
+#Direction Api (drawing line between 2 points) has 2 modes.
+a.)In normal mode (if checkbox is off), to create a route line between 2 points, u have to click on empty map or marker and select "Add to route". When 2 points are selected the route will be drawn + ETA will be displayed.
+ b.)If u switch on checkbox at top left, the application will draw a route line between the endpoint u click on map and hardcoded startpoint (Bandery st).
 
 
 

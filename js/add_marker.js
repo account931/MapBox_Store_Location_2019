@@ -7,9 +7,10 @@
   $(document).ready(function(){
 	
 	
+	/*
+	//retrieveFeature(); //gets one single feature from Datasets
 	
-	//retrieveFeature();
-	//retrieve feature 
+	//retrieve feature, gets one single feature from Datasets, Working!!!
 	function retrieveFeature(){
 	$.ajax({
 	         url:'https://api.mapbox.com/datasets/v1/account931/cjub7lk3l12ce2wo27ccoopdl/features/5cfa32707c902a3231b5258e3b93f24b?access_token=' +  mapboxgl.accessTokenSecret, 
@@ -35,16 +36,15 @@
         });
 	}
 	//END retrieve feature 
+	*/
 	
 	
 	
 	
 	
 	
-	
-	
-//var dataX = '{"type": "Feature","properties": {"title": "School 7", "description": "School 7"},"geometry": {"coordinates": [28.655998, 50.267998],"type": "Point"}}';
-	
+/*	
+//var dataX = '{"type": "Feature","properties": {"title": "School 7", "description": "School 7"},"geometry": {"coordinates": [28.655998, 50.267998],"type": "Point"}}';	
 var dataX = '{"id": "5cfa32707c902a3231b5258e3b93f24b","type": "Feature","geometry": {"coordinates": [28.655998, 50.267998],"type": "Point"}, "properties": {"title": "School 7", "description": "School 7"} }';	
 	
 //test insert a feature
@@ -76,19 +76,40 @@ var dataX = '{"id": "5cfa32707c902a3231b5258e3b93f24b","type": "Feature","geomet
             }	
         });
 //END test insert a feature 
-
+*/
 	
 	
 	
 	
 	
-    // Save place to Dataset
+	
+	 // Show modal window with inputs to save a new marker
     // **************************************************************************************
     // **************************************************************************************
     //                                                                                     ** 
     $(document).on("click", '#savePlace', function() {   // this  click  is  used  to   react  to  newly generated cicles;
 	   
-	   showPreloader("Saving");  
+	    $("#myModalZ").modal("show");
+		   
+	});//end click
+	// **                                                                                  **
+    // **************************************************************************************
+    // **************************************************************************************
+	//END // Show modal window towith iptuts to save new marker
+		
+		
+		
+	
+	
+	
+    // Save place to Dataset (from modal window, according to form inputs). Sends ajax to /ajax_php_scripts/add_marker_php.php which uses logic is in /Classes/AddMarker.php
+    // **************************************************************************************
+    // **************************************************************************************
+    //                                                                                     ** 
+    $(document).on("click", '#savePlaceFinal', function() {   // this  click  is  used  to   react  to  newly generated cicles;
+	   $("#myModalZ").modal("hide"); //hide modal window
+	   showPreloader("Saving"); //funct to show preloader
+	   sendAjax_saveMarker();  //Sends ajax to /ajax_php_scripts/add_marker_php.php which uses logic is in /Classes/AddMarker.php
 		
 		//save logic...........
 		//ajax request to http://localhost/MapBox_Store_Location_2019/ajax_php_scripts/add_feature.php
@@ -127,7 +148,7 @@ var dataX = '{"id": "5cfa32707c902a3231b5258e3b93f24b","type": "Feature","geomet
 	
 	
 	
-	//show or hide preloader
+	//show or hide preloader(on save or delete)
 	// **************************************************************************************
     // **************************************************************************************
     //                                                                                     ** 
@@ -149,6 +170,42 @@ var dataX = '{"id": "5cfa32707c902a3231b5258e3b93f24b","type": "Feature","geomet
     // **************************************************************************************
     // **************************************************************************************
 	
+	
+	
+	
+	
+	
+	
+	//sends ajax to /ajax_php_scripts/add_marker_php.php which uses logic is in /Classes/AddMarker.php
+	// **************************************************************************************
+    // **************************************************************************************
+    //                                                                                     ** 
+	function  sendAjax_saveMarker(){
+		$.ajax({
+	         url:'ajax_php_scripts/add_marker_php.php', 
+          
+			
+			type: 'GET', //if {POST} it gets CORS error
+			dataType: 'json', // without this it returned string(that can be alerted), now it returns object
+
+			//passing the city
+            data: { //serverCity:window.cityX
+			},
+
+            success: function(data) {
+                // do something;
+				alert(JSON.stringify(data));
+				console.log(data);						
+				
+            },  //end success
+			error: function (error) {
+				alert("adding marker error-> " + error);
+            }	
+        });
+	}
+	// **                                                                                  **
+    // **************************************************************************************
+    // **************************************************************************************
 	
 	
 	

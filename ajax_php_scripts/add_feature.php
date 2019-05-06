@@ -1,6 +1,8 @@
 <?php
+//NOT USED!!! REASSIGNED TO to /ajax_php_scripts/add_marker_php.php which uses logic is in /Classes/AddMarker.php
 //PHP cURL variant, must have {curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false)} in oreder to work
-//Must pass secret_token here with ajax from js/add_marker.js
+//Must pass secret_token here with 
+//triggered in ajax from /js/add_marker.js
 
 
 
