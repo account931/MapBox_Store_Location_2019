@@ -109,9 +109,18 @@ require 'vendor/autoload.php'; //Composer autoload
 				 
 				 
 				   
-				      <!-------------- infoBox, display the status of running, shows info ----------------->
+				      <!-------------- infoBox, display the status of running proccess, shows info on black background ----------------->
 				      <div id="infoBox" class="col-sm-8 col-xs-8">
-					      <span class="close-span">x</span>
+					      <span class="close-span">x</span>  
+					  </div>
+					  <!-------------- END infoBox, display the status of running proccess, shows info on black background ----------------->
+					  
+					  
+					  
+					  
+					  <!-------------- infoBox, display the status of running, shows info ----------------->
+				      <div id="techInfo" class="col-sm-12 col-xs-12">
+					      <h3>Tech Info</h3>
 					  </div>
 					  <!-------------- END infoBox, display the status of running, shows info ----------------->
 					  
@@ -136,7 +145,7 @@ require 'vendor/autoload.php'; //Composer autoload
 		 
 		 
 		 
-	<!-----------------  Modal window "Buy Ticket" with info and fields to put Name and E-MAil------------------------------>
+	<!-----------------  Modal window "Add marker" with info and fields to put Name and Description------------------------------>
       <div id="myModalZ" class="modal fade" role="dialog">
           <div class="modal-dialog">
           <!-- Modal content-->
@@ -150,10 +159,10 @@ require 'vendor/autoload.php'; //Composer autoload
 				      <img src="images/location.svg" alt="img"/ class="img-small"><br> 
                       <p><br><br>
 							<label for="formLocationName">Location name:</label>
-                            <p class="form-control inputZ" id="formLocationName"></p>
+                            <input type="text" class="form-control inputZ" id="formLocationName">
 							<br>
 		                    <label for="formDescription">Location description:</label>
-                            <p class="form-control inputZ" id="formDescription"></p>
+                            <input type="text"class="form-control inputZ" id="formDescription">
 							<br>
 		                    
 							<br>
@@ -170,7 +179,7 @@ require 'vendor/autoload.php'; //Composer autoload
 
          </div>
      </div>
-   <!-----------------  END Modal window "Buy Ticket" with info and fields to put Name and E-MAil---------------------------->
+   <!-----------------  END Modal window "Add marker" with info and fields to put Name and Description ---------------------------->
 			   
 			   
 			   

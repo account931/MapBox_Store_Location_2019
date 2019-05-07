@@ -1,14 +1,16 @@
 <?php
+//NOT USED!!!!!!!!!!!!
 //NOT USED!!! REASSIGNED TO to /ajax_php_scripts/add_marker_php.php which uses logic is in /Classes/AddMarker.php
 //PHP cURL variant, must have {curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false)} in oreder to work
 //Must pass secret_token here with 
 //triggered in ajax from /js/add_marker.js
 
-
+//include Mapbox Api key credentails in separate file to easily manipulate with localhost/Hostinger Server settings
+include '../Credentials/php_api_credentials/api_credentials.php';
 
 echo "Start <br>";
 
-$url = "https://api.mapbox.com/datasets/v1/account931/cjub7lk3l12ce2wo27ccoopdl/features/5cfa32707c902a3231b5258e3b93f24bc?access_token=sk.ey";
+$url = "https://api.mapbox.com/datasets/v1/account931/cjub7lk3l12ce2wo27ccoopdl/features/5cfa32707c902a3231b5258e3b93f24bc?access_token=" . MAPBOX_API_KEY; //MAPBOX_API_KEY is in /Credentials/php_api_credentials/api_credentials.php';
 $dataX = '{"id": "5cfa32707c902a3231b5258e3b93f24bc","type": "Feature","geometry": {"coordinates": [28.652198, 50.267998],"type": "Point"}, "properties": {"title": "School Nu", "description": "School Nu Inserted with Php cURL"} }';
 
 

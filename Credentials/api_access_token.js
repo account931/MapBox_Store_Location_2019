@@ -1,6 +1,6 @@
 //MApBox Api access token
 //pk.eyJ
-mapboxgl.accessToken = 'pk.e';
+mapboxgl.accessToken = 'pk.eyJ1';
 
 
 mapboxgl.accessTokenSecret = 'sk.e';

@@ -108,9 +108,9 @@ var dataX = '{"id": "5cfa32707c902a3231b5258e3b93f24b","type": "Feature","geomet
     //                                                                                     ** 
     $(document).on("click", '#savePlaceFinal', function() {   // this  click  is  used  to   react  to  newly generated cicles;
 	   $("#myModalZ").modal("hide"); //hide modal window
-	   showPreloader("Saving"); //funct to show preloader
 	   sendAjax_saveMarker();  //Sends ajax to /ajax_php_scripts/add_marker_php.php which uses logic is in /Classes/AddMarker.php
-		
+	      
+	  
 		//save logic...........
 		//ajax request to http://localhost/MapBox_Store_Location_2019/ajax_php_scripts/add_feature.php
 		//add modal window,pass secret_token, coords, fields from form 
@@ -181,6 +181,17 @@ var dataX = '{"id": "5cfa32707c902a3231b5258e3b93f24b","type": "Feature","geomet
     // **************************************************************************************
     //                                                                                     ** 
 	function  sendAjax_saveMarker(){
+		if(($("#formLocationName").val()=="")||($("#formDescription").val()=="")){ //if empty fields
+			alert("Can not be empty");
+			$("#myModalZ").modal("show");
+			return false;
+		}
+		
+		var coordzLng = clickedCoords.lng;
+		var coordzLat = clickedCoords.lat;
+		//alert(JSON.stringify(clickedCoords));
+		//return false;
+		
 		$.ajax({
 	         url:'ajax_php_scripts/add_marker_php.php', 
           
@@ -189,13 +200,25 @@ var dataX = '{"id": "5cfa32707c902a3231b5258e3b93f24b","type": "Feature","geomet
 			dataType: 'json', // without this it returned string(that can be alerted), now it returns object
 
 			//passing the city
-            data: { //serverCity:window.cityX
+            data: { coordsLNG: clickedCoords.lng, //clicked coords from js/mapbox_store_location.js->{map.on('click', function (e) { }
+			        coordsLAT: clickedCoords.lat,
+					markerName:$("#formLocationName").val(),
+					markerDesc:$("#formDescription").val(),
 			},
 
             success: function(data) {
                 // do something;
-				alert(JSON.stringify(data));
-				console.log(data);						
+				//alert(JSON.stringify(data));
+				console.log(data);	
+                displayStatus("#techInfo", data, "null"); //techInfo window display
+                showPreloader("Saving");  //show preloader
+				
+                if(typeof markerZ !== 'undefined'){ //hide marker with "Save option"
+		            markerZ.remove();
+	            }
+				$("#ETA").html("<h5 class='red'>Marker has been saved!!!!!!</h5>"); //tempo use #ETA
+					
+                return true;				
 				
             },  //end success
 			error: function (error) {

@@ -1,10 +1,11 @@
 Works on Mapbox GL JS.
 Example of GMaps store_locator application but working on Mapbox GL JS
+#Works on localhost only, as zzz.com.ua does not work with cURL php library.
 ==========================================================
 Mapbox JS GL API.
 Links to Api manual: https://docs.mapbox.com/api/maps/#datasets
 #This is an alternative version of Gmaps Store_Locator based on Mapbox GL Api.
-#Stack: php cURL, IIFE, namespace, composer autoload, git.
+#Stack: php cURL, IIFE, namespace, composer autoload, git, function array_push($this->messageArray, "UUID is NOT unique");  function displayStatus(myDiv, message, cssClass)
 
 ==========================================================
 https://docs.mapbox.com/mapbox-gl-js/overview/

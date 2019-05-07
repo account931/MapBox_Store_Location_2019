@@ -1,6 +1,7 @@
-var clickedCoords; //coords of clicked place, global to use in ??
+var clickedCoords; //coords of clicked place, global to use in ajax to pass to /ajax_php_scripts/add_marker_php.php which uses logic is in /Classes/AddMarker.php
 var map; //global to use in direction-api.js
 var popuppZ; //global to use in direction-api.js
+var markerZ; //global var  to be able remove prev markers
 
 (function(){ //START IIFE (Immediately Invoked Function Expression)
 
@@ -305,6 +306,7 @@ function getMatrix(){
 
 
 
+     
 
 
 
@@ -341,10 +343,7 @@ function getMatrix(){
 
 
 
-
-
-
-
+//DIRECTIONS->(draw routes)-> works only if checkbox is ON (top left)
 //START DRAW ROUTE LINE (works only for a hardcoded start position when u switched checkbox on()top left)
 //https://docs.mapbox.com/help/tutorials/getting-started-directions-api/
 //-----------------------------------------------------------------------------------------
@@ -689,6 +688,21 @@ map.on('load', function() {
 
 
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 
 });
@@ -697,3 +711,38 @@ map.on('load', function() {
 	
 	
 }()); //END IIFE (Immediately Invoked Function Expression)
+
+
+
+
+
+
+
+
+
+
+       //functions thats shows info of running(on black screen), instead of alerts, uses var counterb, arg(div, message, css class to add)
+	  // **************************************************************************************
+      // **************************************************************************************
+      //                                                                                     ** 
+	  function displayStatus(myDiv, message, cssClass)
+	  {
+		  var counterb;
+		  counterb++; //counter to encrease delays
+		  var data =  $(myDiv).html(); //gets prev messages //TEMP NOT USED
+		  var final = data + "<p class='" + cssClass + "'>" + message + "</p>";    //adds a new to prev  //TEMP NOT USED
+		  //$(myDiv).hide().html(final).fadeIn(2000);  //disable for makes lines appear one by one with .append
+		  
+		  //$(myDiv).stop().fadeOut("slow",function(){ $(this).html(final)}).fadeIn(2000);
+		  
+		  $(myDiv).hide().fadeIn(2000); //makes div visible
+		  
+		  setTimeout(function(){     //each line appears with delay
+		      $(myDiv).append("<p class='" + cssClass + "'>" + message + "</p>")   		  
+		  }, counterb * 2000); //counterb * 1000 encreases the time for next line to appear
+		  
+		  
+	  }
+	  //END functions thats shows info of running, instead of alerts
+
+
