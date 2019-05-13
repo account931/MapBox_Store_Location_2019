@@ -42,6 +42,11 @@ map.addControl(new mapboxgl.GeolocateControl({
 
 
 
+
+
+
+
+
 /*
 map.on('load', function() {
     map.addSource("mydata", {
@@ -58,8 +63,21 @@ map.on('load', function() {
 
 
 
-//getting Dataset markers values from Dataset(initially created in Studio)
- $.ajax({
+//calls the function
+gets_Dataset_features_from_API();
+
+
+
+
+
+//getting Dataset markers values from Dataset(initial several markers are created in Studio manually)
+// **************************************************************************************
+// **************************************************************************************
+// **                                                                                  **
+// **                                                                                  **
+
+function gets_Dataset_features_from_API(){
+   $.ajax({
             url: 'https://api.mapbox.com/datasets/v1/account931/cjub7lk3l12ce2wo27ccoopdl/features?access_token=' + mapboxgl.accessToken,  //mapboxgl.accessToken is from Credentials/api-access_token.js
             //url:'https://api.mapbox.com/optimized-trips/v1/mapbox/driving/28.684956,50.265008;28.662900,50.262885?access_token=' +  mapboxgl.accessToken, 
 			
@@ -73,7 +91,7 @@ map.on('load', function() {
                 // do something;
 				//alert(JSON.stringify(data));
 				console.log(data);
-				convert_Dataset_to_map(data);
+				convert_Dataset_to_map(data); //function that displays marker from data
 				
 				
 				
@@ -84,8 +102,11 @@ map.on('load', function() {
             }	
         });
 //END getting Dataset markers values
-
-
+}
+// **                                                                                  **
+// **                                                                                  **
+// **************************************************************************************
+// **************************************************************************************
 
 
 

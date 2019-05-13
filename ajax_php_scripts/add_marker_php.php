@@ -13,7 +13,7 @@ $one = new Dima();
 
 $one->generateUUID();
 if ($one->checkIfUniqueUUID() == true){
-	$one->saveMarker(28.669, 50.25, 'hhhh', 'nnn');//($_GET['coordsLNG'], $_GET['coordsLAT'], $_GET['markerName'], $_GET['markerDesc']);
+	$one->saveMarker(28.682198, 50.267998, 'Nuhavn', 'nnn');//($_GET['coordsLNG'], $_GET['coordsLAT'], $_GET['markerName'], $_GET['markerDesc']);
 } else {
 	$one->saveError();
 }

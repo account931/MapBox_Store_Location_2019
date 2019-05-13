@@ -1,15 +1,15 @@
 <?php
-//used in /ajax_php_scripts/add_marker_php. Triggered in ajax from /js/add_marker.js
+//this class is triggered/used in /ajax_php_scripts/add_marker_php. And initially triggered in ajax from /js/add_marker.js
 
-namespace Cubet;
+namespace Cubet; //configured in vendor/autoload.php
 
 
 //include Mapbox Api key credentails in separate file to easily manipulate with localhost/Hostinger Server settings
 include '../Credentials/php_api_credentials/api_credentials.php';
 
 class AddMarker {
-    private $UUID;
-    private $messageArray = array();
+    private $UUID;  //unique ID for marker
+    private $messageArray = array();  //array to contain all Class messages to echo them all at once in the end with {function displayMessages()}
 
 
 
@@ -39,7 +39,10 @@ public function generateUUID(){
 
 
 
-// Check if  generated ID is unique in Dataset
+// Check if  generated ID is unique in Dataset. How it works: it address to specif URL {"https://api.mapbox.com/datasets/v1/account931/{dataset_ID}/features/{feature_ID}?access_token=" . MAPBOX_API_KEY}.
+//IF {feature_ID} is unique API returns {message":"Feature does not exist"} and function returns TRUE
+//If we won't check ID for unique and it happens to be such ID in Dataset, the script will overwrite the existing feature /marker
+
 // **************************************************************************************
 // **************************************************************************************
 // **                                                                                  **
@@ -47,10 +50,10 @@ public function generateUUID(){
 
 public function checkIfUniqueUUID(){
 
-
+  //construct the url to use in cURL
   $url = "https://api.mapbox.com/datasets/v1/account931/cjub7lk3l12ce2wo27ccoopdl/features/" .$this->UUID. "?access_token=" . MAPBOX_API_KEY; //MAPBOX_API_KEY is in /Credentials/php_api_credentials/api_credentials.php';   //https://api.mapbox.com/datasets/v1/account931/DatasetID/features/FeatureID?access_token
 
-//cURL Start-> Version for localhost, cURL is not supported on zzz.com.ua hosting
+//cURL Start-> Version for localhost and 000webhost.com, cURL is not supported on zzz.com.ua hosting
 
   $curl = curl_init();
   curl_setopt_array($curl, array(
@@ -122,20 +125,31 @@ $response = file_get_contents($url,null,null);
 
 
 
-// Save the marker with php cURL
+// Save the marker with help of php cURL library. How it works: cURL address to specif URL {https://api.mapbox.com/datasets/v1/account931/{DatasetID}/features/{FeatureID}?access_token}
+//and passes {$dataX} as body. Both $url and $dataX should contain the same feature ID generated in {function generateUUID()} -> $this->UUID. If we won't check ID for unique and it happens to be such ID in Dataset, the script will overwrite the existing feature /marker
+//$dataX contains = '{"id":"{$this->UUID}" ,"type": "Feature","geometry": {"coordinates": [{$myLng}, {$myLat}],"type": "Point"}, "properties": {"title":"{$myName}", "description":"{$myDescript}"} }';
 // **************************************************************************************
 // **************************************************************************************
 // **                                                                                  **
 // **                                                                                  **
 
-public function saveMarker($myLng, $myLat, $myName, $myDescript){
+public function saveMarker($myLng, $myLat, $myName, $myDescript){ //args(lat, lon,name, descr), args are passed from /ajax_php_scripts/add_marker_php. And it gets ajax from /js/add_marker.js
   
-  
-      $url = "https://api.mapbox.com/datasets/v1/account931/cjub7lk3l12ce2wo27ccoopdl/features/" .$this->UUID. "?access_token=" . MAPBOX_API_KEY; //MAPBOX_API_KEY is in /Credentials/php_api_credentials/api_credentials.php';   //https://api.mapbox.com/datasets/v1/account931/DatasetID/features/FeatureID?access_token
-      $dataX = '{"id":' . $this->UUID . ',"type": "Feature","geometry": {"coordinates": [' . $myLng . ',' .  $myLat . '],"type": "Point"}, "properties": {"title":' . $myName . ', "description":' . $myDescript. '} }';
-//cURL Start-> Version for localhost, cURL is not supported on zzz.com.ua hosting
+      //construct the url to use in cURL (id in $url and in $data must be the same-> it is $this->UUID, a uniue generated number ) 
+      $url = "https://api.mapbox.com/datasets/v1/account931/cjub7lk3l12ce2wo27ccoopdl/features/" . $this->UUID . "?access_token=" . MAPBOX_API_KEY; //MAPBOX_API_KEY is in /Credentials/php_api_credentials/api_credentials.php';   //https://api.mapbox.com/datasets/v1/account931/DatasetID/features/FeatureID?access_token
+      
+	  //construct data to pass in cURL body (id in $url and in $data must be the same-> it is $this->UUID, a uniue generated number ) 
+	  $dataX = '{"id":"' . $this->UUID . '" ,"type": "Feature","geometry": {"coordinates": [' . $myLng . ',' . $myLat . '],"type": "Point"}, "properties": {"title":"' . $myName . '", "description":"' . $myDescript.'"} }'; //MEGA FIX->mega Error was here, {$myName, $myDescript} must be in {""}
 
-    
+	  //cURL Start-> Version for localhost and 000webhost.com, cURL is not supported on zzz.com.ua hosting
+
+    //echo $dataX . "<br>";
+	//return false;
+	
+	//$url = "https://api.mapbox.com/datasets/v1/account931/cjub7lk3l12ce2wo27ccoopdl/features/5cfa32707c902a3231b5258e3b93f24bcc?access_token=" . MAPBOX_API_KEY; //MAPBOX_API_KEY is in /Credentials/php_api_credentials/api_credentials.php';
+    //$dataX = '{"id":"5cfa32707c902a3231b5258e3b93f24bcc","type": "Feature","geometry": {"coordinates": [28.652198, 50.267998],"type": "Point"}, "properties": {"title": "Nuhavn", "description": "School Nu Inserted with Php cURL"} }';
+
+	
 
   $curl = curl_init();
   curl_setopt_array($curl, array(
@@ -164,15 +178,16 @@ public function saveMarker($myLng, $myLat, $myName, $myDescript){
   if ($err) {
     //echo "cURL Error #:" . $err;
 	array_push($this->messageArray, " ERROR SAVING MARKER"); //add message to messageArray to show later in div id="techInfo"
-  } else {
+  } else if ($response) {
     //echo "<p> FEATURE STATUS=></p><p>Below is response from API-></p>";
     //echo $response;
 	array_push($this->messageArray, $myName, $myDescript);//add message to messageArray to show later in div id="techInfo"
     //echo "<br> Marker is Saved!!!";
 	array_push($this->messageArray, " Marker is Savedd!!!"); //add message to messageArray to show later in div id="techInfo"
+	array_push($this->messageArray, $response); //add message to messageArray to show later in div id="techInfo"
   }
 
-//END cURL -> Version for localhost, cURL is not supported on zzz.com.ua hosting-------------
+//END cURL -> Version for localhost and 000webhost.com, cURL is not supported on zzz.com.ua hosting-------------
 
 
 
