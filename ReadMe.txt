@@ -10,6 +10,7 @@ Links to Api manual: https://docs.mapbox.com/api/maps/#datasets
 ==========================================================
 https://docs.mapbox.com/mapbox-gl-js/overview/
 https://docs.mapbox.com/help/tutorials/custom-markers-gl-js/
+https://docs.mapbox.com/api/maps/#datasets
 ========================================================
 
 
@@ -47,12 +48,25 @@ To create feature(marker) manually:
 #Dataset is an Mapbox Api storage, which  allow us not using SQL DB. It us connected to your Mapbox account (account931@ukr.net)(m***+salt). All requests myst contain Api key. For insert/update/delete operation the Api key  must have "Write" scope.
 As zzz.com.ua does not support cURL php lib, this application is deployed to http://dimmm931.000webhostapp.com/MapBox_Store_Location_2019.
 
-#Markers are loaded from an API Dataset in js/mapbox_store_locations.js with js ajax (ONLY)-> {function gets_Dataset_features_from_API();}
+
+
+==============================================
+HOW TO LOADE MARKERS TO MAP FROM DATASET:
+#Markers are loaded from an API Dataset in js/mapbox_store_locations.js with js ajax (ONLY)-> {function gets_Dataset_features_from_API();}. 
+   This ajax must be {cache: false}, it prevents caching, so u can add a new marker and it 'll appear immediately
    On every app load, the application makes ajax request to Dataset to get all Features (markers). 
-   On ajax success we use function {convert_Dataset_to_map(geojson)} to convert dataset features to markers on map.
+   On ajax success we use function {convert_Dataset_to_map(geojson)} to convert dataset features to markers on map (it creates marker and it's pop-up). 
+   Additionally we assign a pop-up "DELETE" button with a {data-coords=marker.id}, which will be used to Delete a marker from Darset API.
+==============================================
+
+
 
 #To add new Feature (marker) to Datasets  Api suggests using PUT method. I tried using ajax PUT, but failed. Therefore, now when u add a new marker (js/add_marker.js), it makes ajax POST request to my own php script  (ajax_pho_scripts/add_marker.php). Php script uses cURL lib to send PUT request with body (marker info) to Mapbox Api.
 Alternatively, it can be done manually via Studio.
+
+
+
+
 
 
 ============================
@@ -73,6 +87,20 @@ $url = "https://api.mapbox.com/datasets/v1/account931/{dataset_id}/features/{fea
 
 
 ===========================================
+
+
+
+
+
+=================================================
+HOW TO DELETE A MARKER WITH API:
+#On creating markers, all "DELETE" button is assigned with a {data-coords=marker.id}, which will be used to Delete a marker from Darset API.
+#Deleteing is done via ajax-> js/delete_marker.js. It address ajax_php_scripts/delete_marker_php, which calls /Classes/DeleteMarker.php methods.
+
+===============================================
+
+
+
 
 #Every click on empty map (except for click on .marker) envokes pop-up with buttons (Save; Add to route).Logic in /js/mapbox_store_location.js ->map.on('click', function (e) { 
 
@@ -145,3 +173,6 @@ To add preloader onClick:
       $(".error-parent").fadeOut(1000); //hide error gif from <Error/>
    }, 4000); // A delay of 1000ms
 ============================================================
+
+Known issues:
+# use css {word-break:break-all;} to breaks the lines of text so it does not overlap div space

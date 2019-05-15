@@ -58,7 +58,7 @@ div.bordered:empty {
 	
 	color:white;
 	background-color:lavender;padding:10px;
-	background-image: url('../images/pattern2.png');  
+	/*background-image: url('../images/pattern2.png');*/  
 	text-shadow: 1px 1px 2px black, 0 0 1em red; /* Shadow params */
 	/* background-image: linear-gradient(120deg, #f093fb 0%, #f5576c 100%); */
 	
@@ -77,6 +77,11 @@ div.bordered:empty {
 #clearArray{margin-left:1%;margin-right:0,1%;cursor:pointer;}
 
 #ETA{width:80%; margin-left:8%; text-shadow: 1px 1px 2px black; /* Shadow params */}
+
+
+
+/* Tech info div */
+#techInfo{word-break:break-all;} /*breaks the line so it does not overlap div space*/
 
 
 .img-small{width:40%;}

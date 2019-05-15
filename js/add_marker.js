@@ -125,22 +125,6 @@ var dataX = '{"id": "5cfa32707c902a3231b5258e3b93f24b","type": "Feature","geomet
 	
 
    
-   
-    //Delete place from Dataset
-    // **************************************************************************************
-    // **************************************************************************************
-    //                                                                                     ** 
-    $(document).on("click", '#deletePlace', function() {   // this  click  is  used  to   react  to  newly generated cicles;
-	   
-	   showPreloader("Deleting");  
-		
-		//delete logic...........
-		   
-	});//end click
-	// **                                                                                  **
-    // **************************************************************************************
-    // **************************************************************************************
-	//END //Delete place from Dataset	
 
 
 	
@@ -217,7 +201,20 @@ var dataX = '{"id": "5cfa32707c902a3231b5258e3b93f24b","type": "Feature","geomet
 		            markerZ.remove();
 	            }
 				$("#ETA").html("<h5 class='red'>Marker has been saved!!!!!!</h5>"); //tempo use #ETA
-					
+				
+				//calls the function
+                gets_Dataset_features_from_API(); //refresh map markers , function from js/mapbox_store_location.js
+				
+				//recenter the map to a new saved marker coordinates, var map is from /js/mapbox_store_location.js----------
+				/*var*/ map = new mapboxgl.Map({
+                container: 'map', // container id
+                center: [clickedCoords.lng, clickedCoords.lat], // starting position [lng, lat]
+                zoom: 16, // starting zoom
+                style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
+                //style: 'mapbox://styles/mapbox/satellite-v9'
+                });
+				//END recenter the map to a new saved marker coordinates--------
+				
                 return true;				
 				
             },  //end success

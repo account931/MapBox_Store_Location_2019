@@ -1,7 +1,11 @@
 var clickedCoords; //coords of clicked place, global to use in ajax to pass to /ajax_php_scripts/add_marker_php.php which uses logic is in /Classes/AddMarker.php
 var map; //global to use in direction-api.js
 var popuppZ; //global to use in direction-api.js
-var markerZ; //global var  to be able remove prev markers
+var markerZ; //global var  to be able remove prev markers (in js/add_marker.js or js/delete_marker.js)
+
+var gets_Dataset_features_from_API; //function to get Dataset markers values from Dataset //we use here Function Expression to pass the name of the function(declared here outside IIFE) to a different js script (js/add_marker.js)
+
+
 
 (function(){ //START IIFE (Immediately Invoked Function Expression)
 
@@ -63,8 +67,7 @@ map.on('load', function() {
 
 
 
-//calls the function
-gets_Dataset_features_from_API();
+
 
 
 
@@ -76,7 +79,7 @@ gets_Dataset_features_from_API();
 // **                                                                                  **
 // **                                                                                  **
 
-function gets_Dataset_features_from_API(){
+gets_Dataset_features_from_API = function(){ //we use here Function Expression to pass the name of the function(declared here outside IIFE) to a different js script (js/add_marker.js)
    $.ajax({
             url: 'https://api.mapbox.com/datasets/v1/account931/cjub7lk3l12ce2wo27ccoopdl/features?access_token=' + mapboxgl.accessToken,  //mapboxgl.accessToken is from Credentials/api-access_token.js
             //url:'https://api.mapbox.com/optimized-trips/v1/mapbox/driving/28.684956,50.265008;28.662900,50.262885?access_token=' +  mapboxgl.accessToken, 
@@ -87,12 +90,13 @@ function gets_Dataset_features_from_API(){
             data: { 
 			    //serverCity:window.cityX
 			},
+			cache: false, //MUST_HAVE option, it prevents caching, so u can add a new marker and it 'll appear immediately
             success: function(data) {
                 // do something;
 				//alert(JSON.stringify(data));
 				console.log(data);
 				convert_Dataset_to_map(data); //function that displays marker from data
-				
+				//alert("Map is Refreshed");
 				
 				
             },  //end success
@@ -108,6 +112,11 @@ function gets_Dataset_features_from_API(){
 // **************************************************************************************
 // **************************************************************************************
 
+
+
+
+//calls the function; we use here Function Expression to pass the name of the function(declared here outside IIFE) to a different js script (js/add_marker.js)
+gets_Dataset_features_from_API();
 
 
 
@@ -178,7 +187,7 @@ function convert_Dataset_to_map(geojson){
     .setHTML('<h3>' + marker.properties.title + '</h3>' + 
 	         '<p>' + marker.properties.description + '</p>' +
 			 '<a href="#"><button class="btn btn-success">To route</button></a>&nbsp;' +  //id="addRoute"
-			 '<a href="#"><button class="btn btn-danger" id="deletePlace">Delete</button></a>'))
+			 '<a href="#"><button class="btn btn-danger" id="deletePlace" data-coords=' + marker.id + '>Delete</button></a>')) //assign a delete button data-coords with it's ID(to use in deletion)
     .addTo(map);
     });
 }
@@ -742,11 +751,11 @@ map.on('load', function() {
 
 
 
-       //functions thats shows info of running(on black screen), instead of alerts, uses var counterb, arg(div, message, css class to add)
+       //functions thats shows info of running(on black screen), instead of alerts, uses var counterb, arg(div, message, css class to add), out of IIFE(as variant can use function expression, and declare just {var displayStatus} outside the IIFE)
 	  // **************************************************************************************
       // **************************************************************************************
       //                                                                                     ** 
-	  function displayStatus(myDiv, message, cssClass)
+	  function displayStatus(myDiv, message, cssClass) //arg(div, message, css class to add)
 	  {
 		  var counterb;
 		  counterb++; //counter to encrease delays
