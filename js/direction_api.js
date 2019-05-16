@@ -10,20 +10,37 @@ var popuppZ;//global from mapbox_store_location.js
 	
 	
 	
-    //When u click at any empty space at map & then click "add to route" in any temporary pop-up
+    //When u click at any empty space at map & then click "add to route" in any temporary pop-up or click "Add to route" in marker from Dataset API
     // **************************************************************************************
     // **************************************************************************************
     //                                                                                     ** 
 	
 	//array will store only 2 elements-> from and to coors , i.e [[20.454,50.4546], [20.454,50.4546]]
 	var start_end_array = [];
+	var resR;
 	
-	
+	//button id="addRoute" Add to Route could be either in marker from Dataset or in temporary marker generated onClick on empty map. Dataset button "Add to route" will have {data-toRoute="coords"}, tempo marker will have no.
     $(document).on("click", '#addRoute', function() {   // this  click  is  used  to   react  to  newly generated cicles;
-	    console.log(clickedCoords); //clickedCoords; //coords of clicked place, come from /js/mapbox_store_location.js
-	    var res = clickedCoords.toString().match(/\(.*?\)/g); //{toString()} is a must // finds anything in ();
-		var resR = res.toString().replace(/\(/g, "").replace(/\)/g, ""); //removes (), and we get string, we should turn to float. Now it is -> "20.58335", "50.54756"
-		var resR = resR.split(','); //split string to array->  ["20.58335", "50.54756"]
+	
+	    if($(this).attr("data-toRoute")){ //if clicked button has {data-toRoute="coords"},i.e from Dataset API. Coords come as "23.44, 45.54"
+			//alert("DATASET " + $(this).attr("data-toRoute") );
+		    resR = $(this).attr("data-toRoute"); //assign to var {resR} value from {data-toRoute}.It will be = "23.44, 45.54"
+			
+			
+		} else { //if clicked button does not have {data-toRoute="coords"},i.e it is temporary marker generated on click on empty map. Coords come as " LngLat(28.6602951587, 50.266253504)" 
+		
+			//alert("Tempo");
+			clickedCoords = clickedCoords; //just remain unchanged // It will be = " LngLat(28.6602951587, 50.266253504)"  //coords of clicked empty place, come from /js/mapbox_store_location.js
+			console.log(clickedCoords); //clickedCoords; //coords of clicked place, come from /js/mapbox_store_location.js
+	        var res = clickedCoords.toString().match(/\(.*?\)/g); //{toString()} is a must // finds anything in ();
+		    var resR = res.toString().replace(/\(/g, "").replace(/\)/g, ""); //removes (), and we get string, we should turn to float. Now it is -> "20.58335", "50.54756"
+		}
+	
+	    
+	
+	
+	    
+		resR = resR.split(','); //split string to array->  ["20.58335", "50.54756"]
 	
 		var res2 = [];
 		for(var i = 0; i < resR.length; i++){
@@ -49,7 +66,7 @@ var popuppZ;//global from mapbox_store_location.js
 		
 		$("#start_end_direction_info").stop().fadeOut("slow",function(){ $(this).html(t)}).fadeIn(2000); //html "from:" and "to:"
 		
-		//removes prev marker if it was set by click
+		//removes prev marker pop-up if it was set by click
         if(typeof popuppZ !== 'undefined'){  //popuppZ is global from mapbox_store_location.js, defined at 1st line, outside IIFE here and in mapbox_store_location.js
 		    popuppZ.remove();
 	    }
@@ -67,7 +84,7 @@ var popuppZ;//global from mapbox_store_location.js
 
 
 
-    //Clears "From:" and "To:" info window in the header + clears ETA + clears Direction layer
+    //Clears "From:" and "To:" fields in info window in the header + clears ETA + clears Direction layer
 	// **************************************************************************************
     // **************************************************************************************
     //                                                                                     ** 

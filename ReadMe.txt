@@ -13,7 +13,7 @@ https://docs.mapbox.com/help/tutorials/custom-markers-gl-js/
 https://docs.mapbox.com/api/maps/#datasets
 ========================================================
 
-
+#Core js file is js/mapbox_store_location.js
 #Marker image is set by css class{.marker}
 
 
@@ -95,9 +95,11 @@ $url = "https://api.mapbox.com/datasets/v1/account931/{dataset_id}/features/{fea
 =================================================
 HOW TO DELETE A MARKER WITH API:
 #On creating markers, all "DELETE" button is assigned with a {data-coords=marker.id}, which will be used to Delete a marker from Darset API.
-#Deleteing is done via ajax-> js/delete_marker.js. It address ajax_php_scripts/delete_marker_php, which calls /Classes/DeleteMarker.php methods.
+#Deletion is done via ajax-> js/delete_marker.js. It address ajax_php_scripts/delete_marker_php, which calls /Classes/DeleteMarker.php methods.
 
 ===============================================
+
+
 
 
 
@@ -108,9 +110,22 @@ HOW TO DELETE A MARKER WITH API:
 
 ==========================================
 #Direction Api (drawing line between 2 points) has 2 modes.
-a.)In normal mode (if checkbox is off), to create a route line between 2 points, u have to click on empty map or marker and select "Add to route". When 2 points are selected the route will be drawn + ETA will be displayed.
- b.)If u switch on checkbox at top left, the application will draw a route line between the endpoint u click on map and hardcoded startpoint (Bandery st).
+a.)In normal mode (if checkbox is off),( we js/direction.js) to create a route line between 2 points, u have to click on empty map or marker and select "Add to route". When 2 points are selected the route will be drawn + ETA will be displayed.
+b.)If u switch on checkbox at top left, ( we js/mapbox_store_locations.js) the application will draw a route line between the endpoint u click on map and hardcoded startpoint (Bandery st).
 ==========================================
+
+HOW WORKS DIRECTION API (js/direction.js), when checkbox at top left is OFF(turned off):
+  #<Button id="addRoute"> Add to Route</button> could be either in marker from Dataset(saved in API Dataset as a feature) or in temporary marker generated onClick on empty map.
+  #Dataset button "Add to route" will have {data-toRoute="coords"}, tempo marker will have no.
+  #Temporary markers coords are received onMap click event {e.lngLat;} and coords come as {"23.44, 45.54"}
+  #Dataset APi markers coords are received from button {data-toRoute} and coords come as object(?) "LngLat(28.6602951587, 50.266253504)", therefor reqiures toString() + clear coords from "LngLat" & "()"
+  #We use spec 2-elements array {start_end_array[]}, which will contain start and stop points. 
+        If start_end_array[0] is empty, we add 1st set of coords as a start point. If not empty, we add coords set as stop point and run_direction_API(), which runs {getRoute(start_end_array[0], start_end_array[1])} 2 times. 
+        Function {getRoute()} makes XMLHttpRequest request to Mapbox API to get route results, steps and layer with route.
+
+===========================================
+
+
 
 
 
@@ -126,7 +141,10 @@ a.)In normal mode (if checkbox is off), to create a route line between 2 points,
 
 
 
- 
+ ==========================
+ GIT
+ Some files are untracked, to see them ->  git ls-files -v|grep '^h'.
+ More details at https://github.com/account931/git-browserify-yii_commands_manuals/blob/master/README.md
  
  
  

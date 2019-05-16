@@ -1,6 +1,6 @@
 var clickedCoords; //coords of clicked place, global to use in ajax to pass to /ajax_php_scripts/add_marker_php.php which uses logic is in /Classes/AddMarker.php
 var map; //global to use in direction-api.js
-var popuppZ; //global to use in direction-api.js
+var popuppZ; //global to use in direction-api.js, temporary marker pop-up
 var markerZ; //global var  to be able remove prev markers (in js/add_marker.js or js/delete_marker.js)
 
 var gets_Dataset_features_from_API; //function to get Dataset markers values from Dataset //we use here Function Expression to pass the name of the function(declared here outside IIFE) to a different js script (js/add_marker.js)
@@ -202,7 +202,7 @@ function convert_Dataset_to_map(geojson){
 	.setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
     .setHTML('<h3>' + marker.properties.title + '</h3>' + 
 	         '<p>' + marker.properties.description + '</p>' +
-			 '<a href="#"><button class="btn btn-success">To route</button></a>&nbsp;' +  //id="addRoute"
+			 '<a href="#"><button class="btn btn-success" id="addRoute" data-toRoute=' + marker.geometry.coordinates + '>To route</button></a>&nbsp;' +  //id="addRoute" //button contains data-toRoute="markerCoords", will be used in js/direction.js, to get coords & differentiate marker from Dataset and temporary marker created onClick(tempo marker won't have attribute data-toRoute)
 			 '<a href="#"><button class="btn btn-danger" id="deletePlace" data-coords=' + marker.id + '>Delete</button></a>')) //assign a delete button data-coords with it's ID(to use in deletion)
     .addTo(map);
 	
@@ -222,8 +222,8 @@ function convert_Dataset_to_map(geojson){
 
 
 
-//On map click(om any empty place)-> Get coordinates + Place a marker to map + opens marker's pop-up automatically without clicking on marker-------------------------------------
-//var markerZ; //global var  to be able remove prev markers
+//On map click(om any empty place)-> Get coordinates + Place a temprary marker to map + opens marker's pop-up automatically without clicking on marker-------------------------------------
+//var markerZ; //global var  to be able remove prev temporary markers
 
 map.on('click', function (e) {  //mousemove 
 
@@ -238,13 +238,13 @@ map.on('click', function (e) {  //mousemove
 	
 	
 	
-	 //detects/checks if u not click on marker, if on marker - Stops everything
+	//detects/checks if u not click on marker, if on marker - Stops everything
     var clickedEl = window.event ? event.srcElement : e.target;
     if (clickedEl.className && (" " + clickedEl.className + " ").indexOf(" marker ") != -1)   //marker is a class="marker"
 	{
-		alert("u clicked marker, not the map"); 
+		//alert("u clicked marker, not the map"); !!!!!!!!!!!!!!!!!!!!!
 		
-		 //removes prev marker if it was set by click
+		 //removes prev tempo marker if it was prev set by click
         if(typeof markerZ !== 'undefined'){
 		    markerZ.remove();
 	    }
@@ -267,8 +267,9 @@ map.on('click', function (e) {  //mousemove
 	//var popuppZ; //went outside IIFE
 	
 	clickedCoords = e.lngLat; //coords of clicked place
+
 	
-	 //Set data to new generated marker, when u click on any empty place on the map
+	 //Set data to new generated temporary marker, when u click on any empty place on the map
 	 /*var*/ markerZ = new mapboxgl.Marker(el)
          .setLngLat(e.lngLat)  //set coords
          .setPopup(popuppZ = new mapboxgl.Popup({ offset: 25 }) // add {var popuppZ} to be able to open it automatically
