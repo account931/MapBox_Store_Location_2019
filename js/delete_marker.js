@@ -80,6 +80,7 @@
 				alert(JSON.stringify(data));
 				console.log(data);	
                 displayStatus("#techInfo", "Marker is Deleted", "null"); //techInfo window display
+				scroll_toTop(); //scroll to top
                 showPreloader("Deleting");  //show preloader
 				
                
@@ -87,19 +88,22 @@
 		            markerZ.remove();
 	            }
 				
-				$("#ETA").html("<h5 class='red'>Marker {IDx} has been deleted!!!!!!</h5>"); //tempo use #ETA
+				$("#ETA").html("<h5 class='red'>Marker " + IDx + " has been deleted!<span class='close-eta'>X</span></h5>"); //tempo use #ETA
 				
                 gets_Dataset_features_from_API(); //refresh map markers , function from js/mapbox_store_location.js
-				
-				//recenter the map to hardcored center, var map is from /js/mapbox_store_location.js----------
-				/*var*/ map = new mapboxgl.Map({
-                container: 'map', // container id
-                center: [28.665445, 50.264004], // starting position [lng, lat]
-                zoom: 13, // starting zoom
-                style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
-                //style: 'mapbox://styles/mapbox/satellite-v9'
-                });
-				//END recenter the map to a  hardcored center--------
+			
+			
+				//smoothly recenter the map to a hardcored center after deletion
+				setTimeout(function(){ //delay 5sec to see effect of recentring after preloader fades
+				map.flyTo({
+					center: [28.665445, 50.264004],
+					zoom: 14,
+                    bearing: 0, speed: 0.2, // make the flying slow
+                    curve: 1, // change the speed at which it zooms out
+					});
+				}, 5000);
+				//smoothly recenter the map to a hardcored center after deletion
+
 			
 				
             },  //end success

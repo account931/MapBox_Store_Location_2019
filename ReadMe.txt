@@ -5,7 +5,7 @@ Example of GMaps store_locator application but working on Mapbox GL JS
 Mapbox JS GL API.
 Links to Api manual: https://docs.mapbox.com/api/maps/#datasets
 #This is an alternative version of Gmaps Store_Locator based on Mapbox GL Api.
-#Stack: php cURL, IIFE, namespace, composer autoload, git, function array_push($this->messageArray, "UUID is NOT unique");  function displayStatus(myDiv, message, cssClass)
+#Stack: php cURL, IIFE, namespace, composer autoload, git, prealoader, data-coords, function array_push($this->messageArray, "UUID is NOT unique");  function displayStatus(myDiv, message, cssClass)
 
 ==========================================================
 https://docs.mapbox.com/mapbox-gl-js/overview/
@@ -176,3 +176,4 @@ To add preloader onClick:
 
 Known issues:
 # use css {word-break:break-all;} to breaks the lines of text so it does not overlap div space
+# map stops responding after insert/delete operation - was caused by wrong recentering the map

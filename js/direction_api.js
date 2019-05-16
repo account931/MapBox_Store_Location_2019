@@ -20,7 +20,7 @@ var popuppZ;//global from mapbox_store_location.js
 	
 	
     $(document).on("click", '#addRoute', function() {   // this  click  is  used  to   react  to  newly generated cicles;
-	    console.log(clickedCoords);
+	    console.log(clickedCoords); //clickedCoords; //coords of clicked place, come from /js/mapbox_store_location.js
 	    var res = clickedCoords.toString().match(/\(.*?\)/g); //{toString()} is a must // finds anything in ();
 		var resR = res.toString().replace(/\(/g, "").replace(/\)/g, ""); //removes (), and we get string, we should turn to float. Now it is -> "20.58335", "50.54756"
 		var resR = resR.split(','); //split string to array->  ["20.58335", "50.54756"]
@@ -156,7 +156,7 @@ function getRoute(startX, end) {
 	$("#instructions").stop().fadeOut("slow",function(){ $(this).html(t)}).fadeIn(2000);
 	
 	//html() ETA
-	$("#ETA").stop().fadeOut("slow",function(){ $(this).html( '<p><i class="fa fa-share-square-o" style="font-size:30px"></i> Route is <b>' + Math.floor(data.duration / 60) + ' min </b></p>')}).fadeIn(2000); //show ETA above the map
+	$("#ETA").stop().fadeOut("slow",function(){ $(this).html( '<p><i class="fa fa-share-square-o" style="font-size:30px"></i> Route is <b>' + Math.floor(data.duration / 60) + ' min </b><span class="close-eta">X</span></p>')}).fadeIn(2000); //show ETA above the map
 	//END SET instructions to div class='instructions'-------
 	
     var geojson = {

@@ -195,24 +195,26 @@ var dataX = '{"id": "5cfa32707c902a3231b5258e3b93f24b","type": "Feature","geomet
 				//alert(JSON.stringify(data));
 				console.log(data);	
                 displayStatus("#techInfo", data, "null"); //techInfo window display
+				scroll_toTop(); //scroll to top
                 showPreloader("Saving");  //show preloader
 				
                 if(typeof markerZ !== 'undefined'){ //hide marker with "Save option"
 		            markerZ.remove();
 	            }
-				$("#ETA").html("<h5 class='red'>Marker has been saved!!!!!!</h5>"); //tempo use #ETA
+				$("#ETA").html("<h5 class='red'>Marker has been saved!!!!!!<span class='close-eta'>X</span></h5>"); //tempo use #ETA
 				
 				//calls the function
                 gets_Dataset_features_from_API(); //refresh map markers , function from js/mapbox_store_location.js
 				
-				//recenter the map to a new saved marker coordinates, var map is from /js/mapbox_store_location.js----------
-				/*var*/ map = new mapboxgl.Map({
-                container: 'map', // container id
-                center: [clickedCoords.lng, clickedCoords.lat], // starting position [lng, lat]
-                zoom: 16, // starting zoom
-                style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
-                //style: 'mapbox://styles/mapbox/satellite-v9'
-                });
+				//smoothly recenter the map to a new saved marker coordinates, var map is from /js/mapbox_store_location.js----------
+				setTimeout(function(){ //delay 5sec to see effect of recentring after preloader fades
+				map.flyTo({
+					center: [clickedCoords.lng, clickedCoords.lat],
+					zoom: 14,
+                    bearing: 0, speed: 0.2, // make the flying slow
+                    curve: 1, // change the speed at which it zooms out
+					});
+				}, 5000);
 				//END recenter the map to a new saved marker coordinates--------
 				
                 return true;				

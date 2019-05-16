@@ -4,7 +4,9 @@ var popuppZ; //global to use in direction-api.js
 var markerZ; //global var  to be able remove prev markers (in js/add_marker.js or js/delete_marker.js)
 
 var gets_Dataset_features_from_API; //function to get Dataset markers values from Dataset //we use here Function Expression to pass the name of the function(declared here outside IIFE) to a different js script (js/add_marker.js)
-
+var currentMarkers=[]; //array that contains all added markers, in order to be able to remove them
+var scrollResults; //global Function to scroll to certain div, it is global & outof IIFE to use in other scripts
+var scroll_toTop;  //global Function to scroll the page to top, it is global & outof IIFE to use in other scripts
 
 
 (function(){ //START IIFE (Immediately Invoked Function Expression)
@@ -173,15 +175,29 @@ var geojson_PREV = {
 
 //function to convert data received from Dataset to markers on map
 function convert_Dataset_to_map(geojson){
-   //add markers to map from predefined array{var geojson}
-   geojson.features.forEach(function(marker) {
+	
+	
+     //removes all markers which are in array currentMarkers[]
+     if (currentMarkers!==null) {
+         for (var i = currentMarkers.length - 1; i >= 0; i--) {
+             currentMarkers[i].remove();
+         }  
+     currentMarkers=[]; 		 
+	 }
+	//END removes all markers which are in array currentMarkers[]
+	
+	
+	
+	
+     //add markers to map from predefined array{var geojson}
+     geojson.features.forEach(function(marker) {
 
       // create a HTML element for each feature
       var el = document.createElement('div');
       el.className = 'marker';
 
      // make a marker for each feature and add to the map
-     new mapboxgl.Marker(el)
+     markerZ = new mapboxgl.Marker(el)
     .setLngLat(marker.geometry.coordinates)
 	.setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
     .setHTML('<h3>' + marker.properties.title + '</h3>' + 
@@ -189,6 +205,8 @@ function convert_Dataset_to_map(geojson){
 			 '<a href="#"><button class="btn btn-success">To route</button></a>&nbsp;' +  //id="addRoute"
 			 '<a href="#"><button class="btn btn-danger" id="deletePlace" data-coords=' + marker.id + '>Delete</button></a>')) //assign a delete button data-coords with it's ID(to use in deletion)
     .addTo(map);
+	
+	currentMarkers.push(markerZ); //adds a currentle created marker to array in order to be able to remove them all from map
     });
 }
 // END add markers to map from predefined array{var geojson}
@@ -220,11 +238,16 @@ map.on('click', function (e) {  //mousemove
 	
 	
 	
-	 //detects if u not click on marker, if on marker Stops everything
+	 //detects/checks if u not click on marker, if on marker - Stops everything
     var clickedEl = window.event ? event.srcElement : e.target;
     if (clickedEl.className && (" " + clickedEl.className + " ").indexOf(" marker ") != -1)   //marker is a class="marker"
 	{
 		alert("u clicked marker, not the map"); 
+		
+		 //removes prev marker if it was set by click
+        if(typeof markerZ !== 'undefined'){
+		    markerZ.remove();
+	    }
 		return false;
 	}
 	
@@ -256,6 +279,8 @@ map.on('click', function (e) {  //mousemove
 				  '<p>' + e.lngLat + '</p>'))
          .addTo(map);
 		 
+		 currentMarkers.push(markerZ); //adds a currentle created marker to array in order to be able to remove them all from map
+		 
 		 popuppZ.addTo(map); //opens pop-up automatically, without clicking on the marker
 		 
 		 //show pop-up
@@ -286,7 +311,7 @@ map.on('click', function (e) {  //mousemove
 
 
 
-//gets distance details between two points
+//gets distance details between two points(does not draw route!!!!!!)
 function getMatrix(){
 	// send  data  to  PHP handler  ************ 
         $.ajax({
@@ -347,27 +372,7 @@ function getMatrix(){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//======================================= DIRECTION (works with checkbox only), custom directions is in js/directions.js ====================================
 
 
 
@@ -724,8 +729,110 @@ map.on('load', function() {
 	
 	
 	
+    //Show/hide markers on top right click
+	// **************************************************************************************
+    // **************************************************************************************
+    //                                                                                     ** 
+	$(".upload").click(function() { 
 	
 	
+	    if ($("#markerShowHide").text()=="Hide marks"){
+		    $("#markerShowHide").stop().fadeOut("fast",function(){ $(this).text('Show marks')}).fadeIn(500); //change text in <a>
+			
+			//Code for Buttons(change text)
+			/*if ($("#btn_Control").prop("value")=="Hide markers"){
+			  $("#btn_Control").stop().fadeOut("fast",function(){ $(this).attr('value', 'Show markers')}).fadeIn(500);
+			  //$("#btn_Control").attr('value', 'Show markers');
+			*/
+			
+			//removes all markers which are in array currentMarkers[]
+            if (currentMarkers!==null) {
+                for (var i = currentMarkers.length - 1; i >= 0; i--) {
+                currentMarkers[i].remove();
+                }  	
+		     }
+	
+	    
+        } else { //if markers are hidden -show them
+			
+			$("#markerShowHide").stop().fadeOut("fast",function(){ $(this).text('Hide marks')}).fadeIn(500);
+			
+			//show all markers which are in array currentMarkers[]
+            if (currentMarkers!==null) {
+                for (var i = currentMarkers.length - 1; i >= 0; i--) {
+                currentMarkers[i].addTo(map);
+                }  	
+		     }
+		}
+		
+	});
+	 
+	// **                                                                                  **
+    // **************************************************************************************
+    // **************************************************************************************
+	
+	
+	
+	
+	
+	//Closes #ETA div (i.e "Marker has beeen saved/deleted"). <span>X</span> is added in JS(i.e in js/add_marker.js)
+	// **************************************************************************************
+    // **************************************************************************************
+    //                                                                                     ** 
+
+	$(document).on("click", '.close-eta', function() {   // this click is used to react to newly generated cicles;
+	    $("#ETA").stop().fadeOut(2000,function(){ $(this).text('')}).fadeIn(500);
+	});
+	 
+	// **                                                                                  **
+    // **************************************************************************************
+    // **************************************************************************************
+	
+	
+	
+		
+	//global Function to scroll to certain div, it is global & declared out of IIFE to use in other scripts
+	// **************************************************************************************
+    // **************************************************************************************
+    //                                                                                     ** 
+	scrollResults = function (divName, parent)  //arg(DivID, levels to go up from DivID)
+	{   //if 2nd arg is not provided while calling the function with one arg
+		if (typeof(parent)==='undefined') {
+		
+            $('html, body').animate({
+                scrollTop: $(divName).offset().top
+                //scrollTop: $('.your-class').offset().top
+             }, 'slow'); 
+		     // END Scroll the page to results
+		} else {
+			//if 2nd argument is provided
+			var stringX = "$(divName)" + parent + "offset().top";  //i.e constructs -> $("#divID").parent().parent().offset().top
+			$('html, body').animate({
+                scrollTop: eval(stringX)         //eval is must-have, crashes without it
+                }, 'slow'); 
+		}
+	}
+	
+	// **                                                                                  **
+    // **************************************************************************************
+    // **************************************************************************************
+	
+	
+	
+	
+	
+	//Function to scroll the page to top
+	// **************************************************************************************
+    // **************************************************************************************
+    //                                                                                     ** 
+	
+	scroll_toTop = function () 
+	{
+	    $("html, body").animate({ scrollTop: 0 }, "slow");	
+	}
+	// **                                                                                  **
+    // **************************************************************************************
+    // **************************************************************************************
 	
 	
 	
@@ -751,7 +858,7 @@ map.on('load', function() {
 
 
 
-       //functions thats shows info of running(on black screen), instead of alerts, uses var counterb, arg(div, message, css class to add), out of IIFE(as variant can use function expression, and declare just {var displayStatus} outside the IIFE)
+       //universal functions that shows info of running events(on black screen on top or tech info below), used instead of alerts, uses var counterb, arg(div, message, css class to add), out of IIFE(as variant can use function expression, and declare just {var displayStatus} outside the IIFE)
 	  // **************************************************************************************
       // **************************************************************************************
       //                                                                                     ** 

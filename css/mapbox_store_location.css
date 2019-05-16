@@ -87,6 +87,9 @@ div.bordered:empty {
 .img-small{width:40%;}
 
 
+/* X span to close <div id="ETA"> */
+.close-eta{margin-left:5px; cursor:pointer; color:black; border:1px solid black; font-size:0.8em; padding:3px;}
+
 
 .footer {
   /* position: absolute; */
@@ -99,7 +102,7 @@ div.bordered:empty {
 }
 
 
-/*  Upload link at top right */
+/*  Show/hide markers  link at top right */
 .upload{
 	position:absolute;
 	right: 1%;

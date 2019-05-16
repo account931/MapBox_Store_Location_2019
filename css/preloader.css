@@ -29,7 +29,7 @@
 @media screen and (max-width: 640px) {
 	.error-parent{top:14em; left:20%;}
 	.error-img{width:99%;}
-    #save_delete_text{color:white;}
+    #save_delete_text{color:black;}
 }  
  
 /*  ----------------Mobile */

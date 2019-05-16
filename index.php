@@ -233,8 +233,8 @@ require 'vendor/autoload.php'; //Composer autoload
 				 
 				 
 				 
-				 <!---------------------------------- Link to upload mp3--------------------------->
-				 <p class="upload"><a class="" href="admin/Classes/authentication.php">Upload POI</a></p> <!-- Link to upload-->
+				 <!---------------------------------- Link to show/hide markers--------------------------->
+				 <p class="upload"><a class="" id="markerShowHide" href="#">Hide marks</a></p> <!-- Link to upload-->
 				  
 				  
 				  
