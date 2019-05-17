@@ -1,6 +1,8 @@
-//Directions Api-> draw route between two selected points
+//Directions Api-> draw route between two  manually selected points
+//Works In normal mode (when checkbox is off), creates a route line between 2 points, u have to click on empty map or marker and select "Add to route". When 2 points are selected the route will be drawn + ETA will be displayed.
 
-var map; //coords of clicked place
+
+var map; //coords of clicked place ???
 var popuppZ;//global from mapbox_store_location.js
 
 (function(){ //START IIFE (Immediately Invoked Function Expression)
@@ -22,7 +24,7 @@ var popuppZ;//global from mapbox_store_location.js
 	//button id="addRoute" Add to Route could be either in marker from Dataset or in temporary marker generated onClick on empty map. Dataset button "Add to route" will have {data-toRoute="coords"}, tempo marker will have no.
     $(document).on("click", '#addRoute', function() {   // this  click  is  used  to   react  to  newly generated cicles;
 	
-	    if($(this).attr("data-toRoute")){ //if clicked button has {data-toRoute="coords"},i.e from Dataset API. Coords come as "23.44, 45.54"
+	    if($(this).attr("data-toRoute")){ //if clicked button has {data-toRoute="coords"},i.e it is button with marker from Dataset API. Coords come as "23.44, 45.54"
 			//alert("DATASET " + $(this).attr("data-toRoute") );
 		    resR = $(this).attr("data-toRoute"); //assign to var {resR} value from {data-toRoute}.It will be = "23.44, 45.54"
 			
@@ -53,23 +55,59 @@ var popuppZ;//global from mapbox_store_location.js
 		//if 1st array el is empty, i.e it is the 1st click on "add to route", i.e it is "From:"
 		if(typeof start_end_array[0] === 'undefined'){
 			start_end_array[0] = res2;
-			var t = "<span class='start-end-info'>from: " + start_end_array[0] + clearArrayText + "</span>";
+			var tx = "<span class='start-end-info'>from: " + start_end_array[0] + clearArrayText + "</span>";
+			
+			//html the marker div with text "Start point", but it change that marker content 4ever, which is no-go for Dataset Api marker, so we have BS warn("Clear") to clear all and re-call {gets_Dataset_features_from_API();} to rebuilt Dataset markers
+		    $(this).parent().closest('div').html("Start point");
+			//var startEndText = "Start"; //not used
+			
 		//if it is the second click	on "add to route", i.e it is "To:"
 		} else {
 			start_end_array[1] = res2;
-			var t = "<span class='start-end-info'>from: " + start_end_array[0] + clearArrayText + "</span><br> <span class='start-end-info'>to__: " + start_end_array[1] + "</span>";
+			var tx = "<span class='start-end-info'>from: " + start_end_array[0] + clearArrayText + "</span><br> <span class='start-end-info'>to__: " + start_end_array[1] + "</span>";
 			//alert("ff " + start_end_array.length);
-			run_direction_API();
 			
+			//html the marker div with text "End point", but it change that marker content 4ever, which is no-go for Dataset Api marker, so we have BS warn("Clear") to clear all and re-call {gets_Dataset_features_from_API();} to rebuilt Dataset markers
+		    $(this).parent().closest('div').html("End point");
+			//var startEndText = "END"; //not used
+			
+			run_direction_API();	//RUN CORE DIRECTION API FUNCTION
 		}
 		
 		
-		$("#start_end_direction_info").stop().fadeOut("slow",function(){ $(this).html(t)}).fadeIn(2000); //html "from:" and "to:"
+		///html "from:" and "to:" in the header
+	    $("#start_end_direction_info").stop().fadeOut("slow",function(){ $(this).html(tx)}).fadeIn(2000); 
+
+
+
+		 //removes prev tempo marker if it was prev set by click
+		 /*
+        if(typeof markerZ !== 'undefined'){ //alert("exist");
+		    markerZ.remove();
+	    } 
+		*/
 		
-		//removes prev marker pop-up if it was set by click
-        if(typeof popuppZ !== 'undefined'){  //popuppZ is global from mapbox_store_location.js, defined at 1st line, outside IIFE here and in mapbox_store_location.js
-		    popuppZ.remove();
-	    }
+		
+		 //removes prev marker pop-up if it was set by click. //removes prev marker if it was set by click
+		 //removeMarker_and_Popup();
+		 
+		 
+	
+		
+	   //adding a  new generated marker to a clicked position(if u clicked on the map, not marker)
+	  /*
+	   var el = document.createElement('div');
+       el.className = 'marker markerAdded';  /// //class of created marker
+		//Set data to new generated temporary marker, when u click on any empty place on the map
+	      markerZ = new mapboxgl.Marker(el)
+         .setLngLat(resR)  //set coords
+         .setPopup(popuppZ = new mapboxgl.Popup({ offset: 25 }) // add {var popuppZ} to be able to open it automatically
+         .setHTML('<p>' + startEndText +  '</p>'))
+         .addTo(map);
+		 
+
+		 popuppZ.addTo(map); //opens pop-up automatically, without clicking on the marker
+		*/ 
 	 
 	 
 	});//end click
@@ -102,6 +140,18 @@ var popuppZ;//global from mapbox_store_location.js
               map.removeLayer('end'); 
 			  map.removeSource('end');
 		 }
+		 
+		 //removes prev marker pop-up if it was set by click. //removes prev marker if it was set by click
+		 removeMarker_and_Popup();
+		 
+		 //calls the function as we changed  markers content to "Start/end" 4ever, which is no-go for Dataset Api marker, so we re-call {gets_Dataset_features_from_API();} to rebuilt Dataset markers
+         gets_Dataset_features_from_API(); //refresh map markers , function from js/mapbox_store_location.js //as DATASET markers now contain "Start/Stop" text not original info
+       
+	   
+	     //if my bootstrap warn exists (Green block with "Clear route"), remove it with animation
+	     if($('.myWarn').length){
+			$(".myWarn").hide('slow', function(){ $this.remove(); }); 
+         }
      });//end click
 	// **                                                                                  **
     // **************************************************************************************
@@ -156,7 +206,7 @@ function getRoute(startX, end) {
     var route = data.geometry.coordinates;
 	alert(route);
 	
-	
+	//console.log(data);
 	
 	//SET instructions to div class='instructions'-----------
 	// get the sidebar and add the instructions
@@ -169,12 +219,19 @@ function getRoute(startX, end) {
         tripInstructions.push('<br><li>' + steps[i].maneuver.instruction) + '</li>';
        //instructions.innerHTML = '<h3>Directions API</h3><span class="duration">Trip duration: ' + Math.floor(data.duration / 60) + ' min рџљґ </span>' + tripInstructions;
 	}
-	var t = '<h3>Directions API</h3><span class="duration">Trip duration: ' + Math.floor(data.duration / 60) + ' min  </span>' + tripInstructions;
+	
+	//HTML Instruction div in the bottom
+	var t = '<h3>Directions API</h3><span class="duration">Trip duration: ' + Math.floor(data.duration / 60) + ' min. Distance: ' + Math.floor(data.distance / 1000) + ' km </span>' + tripInstructions;
 	$("#instructions").stop().fadeOut("slow",function(){ $(this).html(t)}).fadeIn(2000);
 	
 	//html() ETA
-	$("#ETA").stop().fadeOut("slow",function(){ $(this).html( '<p><i class="fa fa-share-square-o" style="font-size:30px"></i> Route is <b>' + Math.floor(data.duration / 60) + ' min </b><span class="close-eta">X</span></p>')}).fadeIn(2000); //show ETA above the map
+	$("#ETA").stop().fadeOut("slow",function(){ $(this).html( '<p><i class="fa fa-share-square-o" style="font-size:30px"></i> Route time: <b>' + Math.floor(data.duration / 60) + ' min. Distance: ' + Math.floor(data.distance / 1000) + ' km </b><span class="close-eta">X</span></p>')}).fadeIn(2000); //show ETA above the map
 	//END SET instructions to div class='instructions'-------
+	
+	
+	 //removes prev marker pop-up if it was set by click + removes prev marker if it was set by click //function from js/mapbox_store_location.js
+	 removeMarker_and_Popup();
+	
 	
     var geojson = {
       type: 'Feature',
@@ -263,6 +320,16 @@ function getRoute(startX, end) {
          });
      }
   // end aaaaaa
+  
+  
+  
+   //Append green Bootstrap warning ("Clear") with animation
+   var new_BSwarning = $('<div id="start_end_direction_info" class="myWarn alert alert-success text-center col-centered" style="position:absolute;top:10px;width:95%; margin-left:10px; border:2px solid white; cursor:pointer;"> Clear the route</div>').hide();
+   $("#map").append(new_BSwarning); 
+   new_BSwarning.show(5000);	
+		
+		
+		
 }
 	 
 	 

@@ -187,6 +187,49 @@ require 'vendor/autoload.php'; //Composer autoload
 			   
 			   
 			   
+	<!-----------------  Modal window "INFORMATION" shows list of all Dataset markers ----------------------------->
+      <div id="myModalInfo" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+          <!-- Modal content-->
+              <div class="modal-content">
+                  <div class="modal-header">
+                       <button type="button" class="close" data-dismiss="modal">&times;</button>
+                       <h4 class="modal-title">List of your Datasets Markers </h4>
+                  </div>
+                  <div class="modal-body">
+				      <center>
+				      <img src="images/places.jpg" alt="img"/ class="img-small"><br> <br>
+					  
+					  
+					  <p>Please know, you can use MBox API asserts with your markers stored in Dataset API at this page</p>
+	                  <p>You can add your personal markers to Dataset API, delete them, draw the route between two markers and calculate ETA and distance</p>
+	  
+	                  <p>1. To add your personal marker, please click any place at map and select an option to add a marker</p>
+	                  <p>2. To delete your personal marker, please click the marker and select an option to delete a marker </p>
+	                  <p>3. To calcuate ETA and distance between two personal markers and draw a route, please select start and stop destination by clicking "Add to route" </p>
+	                  <p>4. To hide a drawn route and distance info, please click "Clear" </p>
+	                  <br></hr class="red">
+					  
+					  <!-- List of markers-->
+                      <p id="list_of_markers" style="text-align:left;">
+							<!-- here goes JS List -->
+					  </p>
+					  </center>
+                  </div>
+                  <div class="modal-footer">
+				       
+                       <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+              </div>
+
+         </div>
+     </div>
+   <!-----------------  END Modal window "INFORMATION" shows list of all Dataset markers ---------------------------->   
+			   
+			   
+			   
+			   
+			   
 			   
 			   
 
@@ -231,7 +274,14 @@ require 'vendor/autoload.php'; //Composer autoload
 				  
 				
 				 
-				 
+				   <!-----------------  Button with info------------------------------------>
+	               <!--data-toggle="modal" data-target="#myModalZ" is a Bootstrap trigger---->
+	               <button data-toggle="modal" data-target="#myModalInfo" class="btn" style="font-size:17px; position:absolute;top:0px;right:0px;" title="click to see info">
+	               &nbsp;<i class="fa fa-info-circle"></i>&nbsp;
+	               </button>    
+	               <!-----------------  Button with info------------------------------------>
+	   
+	   
 				 
 				 <!---------------------------------- Link to show/hide markers--------------------------->
 				 <p class="upload"><a class="" id="markerShowHide" href="#">Hide marks</a></p> <!-- Link to upload-->

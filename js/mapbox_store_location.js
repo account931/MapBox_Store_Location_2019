@@ -1,13 +1,13 @@
 var clickedCoords; //coords of clicked place, global to use in ajax to pass to /ajax_php_scripts/add_marker_php.php which uses logic is in /Classes/AddMarker.php
 var map; //global to use in direction-api.js
-var popuppZ; //global to use in direction-api.js, temporary marker pop-up
+var popuppZ; //global to use in direction-api.js, temporary and Dataset marker pop-up
 var markerZ; //global var  to be able remove prev markers (in js/add_marker.js or js/delete_marker.js)
 
 var gets_Dataset_features_from_API; //function to get Dataset markers values from Dataset //we use here Function Expression to pass the name of the function(declared here outside IIFE) to a different js script (js/add_marker.js)
 var currentMarkers=[]; //array that contains all added markers, in order to be able to remove them
-var scrollResults; //global Function to scroll to certain div, it is global & outof IIFE to use in other scripts
-var scroll_toTop;  //global Function to scroll the page to top, it is global & outof IIFE to use in other scripts
-
+var scrollResults; //global Function to scroll to certain div, it is global & declared var out of IIFE to use in other scripts
+var scroll_toTop;  //global Function to scroll the page to top, it is global & declared var out of IIFE to use in other scripts
+var removeMarker_and_Popup; //global Function to remove any markers and pop-ups, it is global & declared var out of IIFE to use in other scripts
 
 (function(){ //START IIFE (Immediately Invoked Function Expression)
 
@@ -177,7 +177,7 @@ var geojson_PREV = {
 function convert_Dataset_to_map(geojson){
 	
 	
-     //removes all markers which are in array currentMarkers[]
+     //removes all markers which are in array currentMarkers[] //useful when we added a new one and page makes a new reuest to Dataset Api
      if (currentMarkers!==null) {
          for (var i = currentMarkers.length - 1; i >= 0; i--) {
              currentMarkers[i].remove();
@@ -192,22 +192,26 @@ function convert_Dataset_to_map(geojson){
      //add markers to map from predefined array{var geojson}
      geojson.features.forEach(function(marker) {
 
-      // create a HTML element for each feature
-      var el = document.createElement('div');
-      el.className = 'marker';
+         // create a HTML element for each feature
+         var el = document.createElement('div');
+         el.className = 'marker';
 
-     // make a marker for each feature and add to the map
-     markerZ = new mapboxgl.Marker(el)
-    .setLngLat(marker.geometry.coordinates)
-	.setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
-    .setHTML('<h3>' + marker.properties.title + '</h3>' + 
+        // make a marker for each feature and add to the map
+        markerZ = new mapboxgl.Marker(el)
+       .setLngLat(marker.geometry.coordinates)
+	   .setPopup(popuppZ = new mapboxgl.Popup({ offset: 25 }) // add popups
+       .setHTML('<h3>' + marker.properties.title + '</h3>' + 
 	         '<p>' + marker.properties.description + '</p>' +
 			 '<a href="#"><button class="btn btn-success" id="addRoute" data-toRoute=' + marker.geometry.coordinates + '>To route</button></a>&nbsp;' +  //id="addRoute" //button contains data-toRoute="markerCoords", will be used in js/direction.js, to get coords & differentiate marker from Dataset and temporary marker created onClick(tempo marker won't have attribute data-toRoute)
 			 '<a href="#"><button class="btn btn-danger" id="deletePlace" data-coords=' + marker.id + '>Delete</button></a>')) //assign a delete button data-coords with it's ID(to use in deletion)
-    .addTo(map);
+       .addTo(map);
 	
-	currentMarkers.push(markerZ); //adds a currentle created marker to array in order to be able to remove them all from map
+	   currentMarkers.push(markerZ); //adds a currentle created marker to array in order to be able to remove them all from map
+	   
     });
+	
+    //Function creates list of markers in Modal id="myModalInfo" -> <p id="list_of_markers">
+	createList_of_markers_modal(geojson); 
 }
 // END add markers to map from predefined array{var geojson}
 
@@ -221,7 +225,7 @@ function convert_Dataset_to_map(geojson){
 
 
 
-
+//Creating temporary marker on map Click
 //On map click(om any empty place)-> Get coordinates + Place a temprary marker to map + opens marker's pop-up automatically without clicking on marker-------------------------------------
 //var markerZ; //global var  to be able remove prev temporary markers
 
@@ -236,7 +240,7 @@ map.on('click', function (e) {  //mousemove
         // e.lngLat is the longitude, latitude geographical position of the event
         JSON.stringify(e.lngLat);
 	
-	
+	clickedCoords = e.lngLat; //coords of clicked place
 	
 	//detects/checks if u not click on marker, if on marker - Stops everything
     var clickedEl = window.event ? event.srcElement : e.target;
@@ -266,7 +270,7 @@ map.on('click', function (e) {  //mousemove
 	//var for marker pop-uo
 	//var popuppZ; //went outside IIFE
 	
-	clickedCoords = e.lngLat; //coords of clicked place
+	//clickedCoords = e.lngLat; //coords of clicked place
 
 	
 	 //Set data to new generated temporary marker, when u click on any empty place on the map
@@ -280,7 +284,7 @@ map.on('click', function (e) {  //mousemove
 				  '<p>' + e.lngLat + '</p>'))
          .addTo(map);
 		 
-		 currentMarkers.push(markerZ); //adds a currentle created marker to array in order to be able to remove them all from map
+		 //currentMarkers.push(markerZ); //WE DON"T NEED IT FOR TEMPO MARKERS!!!! //adds a currentle created marker to array in order to be able to remove them all from map
 		 
 		 popuppZ.addTo(map); //opens pop-up automatically, without clicking on the marker
 		 
@@ -782,12 +786,57 @@ map.on('load', function() {
     //                                                                                     ** 
 
 	$(document).on("click", '.close-eta', function() {   // this click is used to react to newly generated cicles;
-	    $("#ETA").stop().fadeOut(2000,function(){ $(this).text('')}).fadeIn(500);
+	    $("#ETA").stop().fadeOut(2000,function(){ $(this).text('')}).fadeIn(500); //animate
 	});
 	 
 	// **                                                                                  **
     // **************************************************************************************
     // **************************************************************************************
+	
+	
+	
+	
+	
+	
+	//global Function to remove any markers and pop-ups, it is global & declared var out of IIFE to use in other scripts
+	// **************************************************************************************
+    // **************************************************************************************
+    //                                                                                     ** 
+	removeMarker_and_Popup = function(){
+		 //removes prev marker pop-up if it was set by click. If uncomment it will not open pop-up "Start/end point" for temporary markers
+        if(typeof popuppZ !== 'undefined'){  //popuppZ is global from mapbox_store_location.js, defined at 1st line, outside IIFE here and in mapbox_store_location.js
+		    popuppZ.remove();
+	    }
+		
+		//removes prev marker if it was set by click
+         if(typeof markerZ !== 'undefined'){
+		     markerZ.remove();
+	     }
+	}
+	// **                                                                                  **
+    // **************************************************************************************
+    // **************************************************************************************
+	
+	
+	
+	
+	
+	//Function creates list of markers in Modal id="myModalInfo" -> <p id="list_of_markers">
+    // **************************************************************************************
+    // **************************************************************************************
+    //                                                                                     ** 
+	function createList_of_markers_modal(dataFromApi){ 
+	    var allList = "<br><h4>Your list of markers:  " + Object.keys(dataFromApi.features).length + " items.</h4>";
+		
+	    dataFromApi.features.forEach(function(dataZ, i) {
+			allList += "<p>" + (i +1) + " " + dataZ.properties.title + "</p>"; //number + title
+		});
+		$("#list_of_markers").html(allList);
+	}
+	
+	
+	
+	
 	
 	
 	
