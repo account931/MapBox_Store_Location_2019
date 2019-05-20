@@ -190,7 +190,10 @@ function convert_Dataset_to_map(geojson){
 	
 	
      //add markers to map from predefined array{var geojson}
-     geojson.features.forEach(function(marker) {
+     geojson.features.forEach(function(marker, idx) {
+		 
+		 //if elem is last, skip it as it creats an empty marker(last array el is {_proto__})
+		 if (idx === geojson.features.length - 1){ return false;}
 
          // create a HTML element for each feature
          var el = document.createElement('div');
@@ -202,6 +205,8 @@ function convert_Dataset_to_map(geojson){
 	   .setPopup(popuppZ = new mapboxgl.Popup({ offset: 25 }) // add popups
        .setHTML('<h3>' + marker.properties.title + '</h3>' + 
 	         '<p>' + marker.properties.description + '</p>' +
+			 '<p style="font-size:0.5em">ID: ' + marker.id + '<br>' + //ID
+			   'Lat/lan: ' + marker.geometry.coordinates + '</p>' + //coords
 			 '<a href="#"><button class="btn btn-success" id="addRoute" data-toRoute=' + marker.geometry.coordinates + '>To route</button></a>&nbsp;' +  //id="addRoute" //button contains data-toRoute="markerCoords", will be used in js/direction.js, to get coords & differentiate marker from Dataset and temporary marker created onClick(tempo marker won't have attribute data-toRoute)
 			 '<a href="#"><button class="btn btn-danger" id="deletePlace" data-coords=' + marker.id + '>Delete</button></a>')) //assign a delete button data-coords with it's ID(to use in deletion)
        .addTo(map);
@@ -212,6 +217,9 @@ function convert_Dataset_to_map(geojson){
 	
     //Function creates list of markers in Modal id="myModalInfo" -> <p id="list_of_markers">
 	createList_of_markers_modal(geojson); 
+	
+	//Function creates list of markers in <select> <option>
+	generateSelect('Select', 1, 'markerDropdown', geojson ); //args ("text for dropdown", 1 or to to add to id="selectID", span to html(), ApiDAta )
 }
 // END add markers to map from predefined array{var geojson}
 
@@ -832,11 +840,64 @@ map.on('load', function() {
 			allList += "<p>" + (i +1) + " " + dataZ.properties.title + "</p>"; //number + title
 		});
 		$("#list_of_markers").html(allList);
+		
+		
+		 
 	}
 	
+	// **                                                                                  **
+    // **************************************************************************************
+    // **************************************************************************************
 	
 	
 	
+	
+	
+	
+	   //Function that generates markers list in <option><select> in header
+	   // **************************************************************************************
+       // **************************************************************************************
+       //                                                                                     **
+	   
+	   function generateSelect(selectText, i, spanID, geojsonX){ ////args ("text for dropdown", 1 or to to add to id="selectID", span to html(), ApiDAta object )
+	       var destination = "<select id='selectID" + i + "'>";
+	       destination += "<option value='' selected='selected'>" + selectText + "</option>";
+		   myList = ""; //list for instruction modal
+		   //alert(geojsonX.features.length);
+	       for ( i = 0; i < geojsonX.features.length; i++ ){
+		       //alert(geojsonX.features[i].geometry.coordinates);
+		       destination = destination + "<option value='" + geojsonX.features[i].geometry.coordinates + "'>" + geojsonX.features[i].properties.title + "</option>"; 
+			   
+			   //markers list for Instruction modal window
+			   myList = myList + "<p>" + (i + 1) + "." + geojsonX.features[i].properties.title + "</p>";
+	        } 
+	   
+	        destination = destination + "</select>";
+	        $("#" + spanID).html(destination);
+	        //$("#destination2").html(destination);
+	        //end generates option_select
+			
+			
+	   }
+	  // **                                                                                  **
+      // **************************************************************************************
+      // **************************************************************************************
+	
+	
+	  
+	   //Listens/detects changes in markers <select><option/> and makes map flies there
+	   // **************************************************************************************
+       // **************************************************************************************
+       //                                                                                     **
+	  $(document).on("change", '#selectID1', function() {   // this click is used to react to newly generated cicles;
+	      //alert($("#selectID1").val());
+		  map.flyTo({
+					center: $("#selectID1").val().split(","), //creates array [23.45454, 51.56565]
+					zoom: 14,
+                    bearing: 0, speed: 0.2, // make the flying slow
+                    curve: 1, // change the speed at which it zooms out
+					});
+	  });
 	
 	
 	

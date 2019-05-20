@@ -90,6 +90,9 @@ div.bordered:empty {
 /* X span to close <div id="ETA"> */
 .close-eta{margin-left:5px; cursor:pointer; color:black; border:1px solid black; font-size:0.8em; padding:3px;}
 
+/* Dropdown <select> of markers list */
+#markerDropdown{position:relative; right:0px; bottom:0px;color:black;font-size:1em;margin-top:1em;}
+
 
 .footer {
   /* position: absolute; */

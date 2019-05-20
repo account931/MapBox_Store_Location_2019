@@ -55,7 +55,12 @@ require 'vendor/autoload.php'; //Composer autoload
 
        <div id="headX" class="jumbotron text-center gradient alert-success my-background head-style" style ='background-color:#2ba6cb;'> <!--#2ba6cb;-->
          <h1 id="h1Text"> <span id="textChange"> MapBox Store Location 2019</span></h1> 
-         <span id="start_end_direction_info"></span> <!-- start/end coordinates for direction API-->		 
+         <span id="start_end_direction_info"></span> <!-- start/end coordinates for direction API-->	
+         
+		  <!-- SELECT Dropdown for markers -->
+          <p id="markerDropdown"></p>	
+          <!-- END SELECT Dropdown for markers -->		  
+		  
 	   </div>
        
          <div class="wrapper grey App">
