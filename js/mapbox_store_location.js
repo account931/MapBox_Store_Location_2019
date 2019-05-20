@@ -884,17 +884,19 @@ map.on('load', function() {
       // **************************************************************************************
 	
 	
+	
 	  
-	   //Listens/detects changes in markers <select><option/> and makes map flies there
+	   //IT Listens/detects changes in markers <select><option/> and makes map camera flies there
 	   // **************************************************************************************
        // **************************************************************************************
        //                                                                                     **
 	  $(document).on("change", '#selectID1', function() {   // this click is used to react to newly generated cicles;
 	      //alert($("#selectID1").val());
+		  $(this).blur();//hide Select list(as in mobile it remains still)
 		  map.flyTo({
 					center: $("#selectID1").val().split(","), //creates array [23.45454, 51.56565]
 					zoom: 14,
-                    bearing: 0, speed: 0.2, // make the flying slow
+                    bearing: 0, speed: 0.8, // make the flying slow
                     curve: 1, // change the speed at which it zooms out
 					});
 	  });
