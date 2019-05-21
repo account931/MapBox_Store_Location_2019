@@ -193,14 +193,15 @@ function convert_Dataset_to_map(geojson){
      geojson.features.forEach(function(marker, idx) {
 		 
 		 //if elem is last, skip it as it creats an empty marker(last array el is {_proto__})
-		 if (idx === geojson.features.length - 1){ return false;}
+		 //if (idx === geojson.features.length - 1){ return false;}
 
+		 //alert(idx);
          // create a HTML element for each feature
          var el = document.createElement('div');
          el.className = 'marker';
 
         // make a marker for each feature and add to the map
-        markerZ = new mapboxgl.Marker(el)
+	 markerZXX = new mapboxgl.Marker(el)   //MEGA FIX -> var name {markerZXX} must differ from Tempo marker name, otherwise it 'll cause last Dataset marker dissapear onClick
        .setLngLat(marker.geometry.coordinates)
 	   .setPopup(popuppZ = new mapboxgl.Popup({ offset: 25 }) // add popups
        .setHTML('<h3>' + marker.properties.title + '</h3>' + 

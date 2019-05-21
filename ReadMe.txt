@@ -195,3 +195,4 @@ To add preloader onClick:
 Known issues:
 # use css {word-break:break-all;} to breaks the lines of text so it does not overlap div space
 # map stops responding after insert/delete operation - was caused by wrong recentering the map
+# when building Dataset markers -> //MEGA FIX -> var name {markerZXX} must differ from Tempo marker name{markerZ}, otherwise it 'll cause last Dataset marker dissapear onClick
