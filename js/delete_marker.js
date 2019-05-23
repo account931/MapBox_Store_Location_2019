@@ -84,9 +84,14 @@
                 showPreloader("Deleting");  //show preloader
 				
                
-			    if(typeof markerZ !== 'undefined'){ //hide marker with "DELETE option"
+			    /*if(typeof markerZ !== 'undefined'){ //hide TEMPO marker with "DELETE option"
 		            markerZ.remove();
+	            }*/
+				
+				 if(typeof markerZXX !== 'undefined'){ //hide DATASET marker with "DELETE option"
+		            markerZXX.remove();
 	            }
+				
 				
 				$("#ETA").html("<h5 class='red'>Marker " + IDx + " has been deleted!<span class='close-eta'>X</span></h5>"); //tempo use #ETA
 				

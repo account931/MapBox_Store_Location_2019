@@ -2,7 +2,7 @@ var clickedCoords; //coords of clicked place, global to use in ajax to pass to /
 var map; //global to use in direction-api.js
 var popuppZ; //global to use in direction-api.js, temporary and Dataset marker pop-up
 var markerZ; //global var  to be able remove prev markers (in js/add_marker.js or js/delete_marker.js)
-
+var markerZXX; //Dataset marker;
 var gets_Dataset_features_from_API; //function to get Dataset markers values from Dataset //we use here Function Expression to pass the name of the function(declared here outside IIFE) to a different js script (js/add_marker.js)
 var currentMarkers=[]; //array that contains all added markers, in order to be able to remove them
 var scrollResults; //global Function to scroll to certain div, it is global & declared var out of IIFE to use in other scripts
@@ -212,7 +212,7 @@ function convert_Dataset_to_map(geojson){
 			 '<a href="#"><button class="btn btn-danger" id="deletePlace" data-coords=' + marker.id + '>Delete</button></a>')) //assign a delete button data-coords with it's ID(to use in deletion)
        .addTo(map);
 	
-	   currentMarkers.push(markerZ); //adds a currentle created marker to array in order to be able to remove them all from map
+	   currentMarkers.push(markerZXX); //adds a currentle created marker to array in order to be able to remove them all from map
 	   
     });
 	
