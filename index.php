@@ -117,7 +117,7 @@ require 'vendor/autoload.php'; //Composer autoload
 				   
 				      <!-------------- infoBox, display the status of running proccess, shows info on black background ----------------->
 				      <div id="infoBox" class="col-sm-8 col-xs-8">
-					      <span class="close-span">x</span>  
+					      <span class="close-span iphoneX">x</span>  
 					  </div>
 					  <!-------------- END infoBox, display the status of running proccess, shows info on black background ----------------->
 					  
@@ -289,7 +289,7 @@ require 'vendor/autoload.php'; //Composer autoload
 	   
 				 
 				 <!---------------------------------- Link to show/hide markers--------------------------->
-				 <p class="upload"><a class="" id="markerShowHide" href="#">Hide marks</a></p> <!-- Link to upload-->
+				 <p class="upload"><a class="iphoneX" id="markerShowHide" href="#">Hide marks</a></p> <!-- Link to upload-->
 				  
 				  
 				  

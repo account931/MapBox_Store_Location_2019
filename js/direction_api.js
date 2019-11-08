@@ -324,7 +324,7 @@ function getRoute(startX, end) {
   
   
    //Append green Bootstrap warning ("Clear") with animation
-   var new_BSwarning = $('<div id="start_end_direction_info" class="myWarn alert alert-success text-center col-centered" style="position:absolute;top:10px;width:95%; margin-left:10px; border:2px solid white; cursor:pointer;"> Clear the route</div>').hide();
+   var new_BSwarning = $('<div id="start_end_direction_info" class="myWarn alert alert-success text-center col-centered iphoneX" style="position:absolute;top:10px;width:95%; margin-left:10px; border:2px solid white; cursor:pointer;"> Clear the route</div>').hide();
    $("#map").append(new_BSwarning); 
    new_BSwarning.show(5000);	
 		

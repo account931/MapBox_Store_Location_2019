@@ -120,3 +120,9 @@ div.bordered:empty {
 .upload{right: 17%;} 
 }
 .upload a{ color:white;}
+
+
+/* Fix for IOS, when JS cick does not work in Safari*/
+.iphoneX{
+	cursor:pointer;
+}
